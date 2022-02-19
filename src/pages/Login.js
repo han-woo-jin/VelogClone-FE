@@ -10,6 +10,7 @@ import Text from '../elements/Text';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { emailCheck } from '../shared/common';
 import { useDispatch } from 'react-redux';
+import { history } from '../redux/configStore';
 
 
 const Login = () => {
@@ -30,6 +31,7 @@ const Login = () => {
       return;
     }
     dispatch(userActions.loginAction(userEmail, password));
+    history.push('/');
   };
   return (
 

@@ -126,17 +126,17 @@ background-color: ${props => props.theme === 'light' ? 'white' : '#121212'};
   display: flex;
   align-items: flex-start;
   position: absolute;
-  right: 10px;
-  bottom: -50px;
+  right: 25px;
+  bottom: -40px;
 `;
 
 const ChangBtn = styled.div`
 
 background-color: ${props => props.theme === 'light' ? 'white' : '#121212'};
   width: auto;
-  margin: 15px;
+  margin: -1.5px;
   font-size: 16px;
-  margin-left: 15px;
+  margin-left: 10px;
   font-weight: 600;
   color: #4cbc9b;
   font-weight: bold;

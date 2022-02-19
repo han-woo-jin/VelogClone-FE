@@ -4,7 +4,7 @@ const tokencheck = document.cookie;
 const token = tokencheck.split("=")[1];
 export const instance = axios.create({
   // 기본적으로 우리가 바라볼 서버의 주소
-  baseURL: "",
+  baseURL: "http://15.164.211.199/",
   headers: {
     // "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
     // accept: "*/*",
@@ -20,14 +20,6 @@ instance.interceptors.request.use(function (config) {
   config.headers.common["Authorization"] = `${accesstoken}`;
   return config;
 });
-
-
-export const axapis = {
-  createPost: (formData) => instance.post("/api/meeting", formData),
-
-  createComment: (meetingId, content) => instance.post(`api/meeting/${meetingId}/comments`, content),
-}
-
 
 
 export const apis = {

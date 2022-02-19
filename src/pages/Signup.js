@@ -19,8 +19,8 @@ const Signup = () => {
   const [userName, setNickName] = React.useState("");
 
   const dispatch = useDispatch();
-
   const signup = () => {
+
 
     if (userEmail === "" || password === "" || passwordcheck === "" || userName === "") {
       window.alert("아이디, 패스워드, 닉네임을 모두 입력해주세요!");

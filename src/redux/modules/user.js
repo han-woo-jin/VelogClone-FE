@@ -4,23 +4,19 @@ import { setCookie, getCookie, deleteCookie } from "../../shared/cookie";
 import axios from 'axios';
 import { apis } from '../../shared/axios';
 
-
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
 const SET_USER = "SET_USER";
 
-
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
 const setUser = createAction(SET_USER, (user) => ({ user }));
-
 
 const initialState = {
   // userinfo: {email: "", nickname: ""},
   user: null,
   is_login: false,
 };
-
 
 const loginCheck = (user) => {
   return function (dispatch, getState, { history }) {
@@ -29,7 +25,6 @@ const loginCheck = (user) => {
     history.push("/");
   };
 };
-
 
 const loginAction = (userEmail, password) => {
   return function (dispatch, getState, { history }) {
@@ -47,7 +42,6 @@ const loginAction = (userEmail, password) => {
   };
 };
 
-
 const signupAction = (userEmail, password, passwordCheck, userName) => {
   return function (dispatch, getState, { history }) {
     apis
@@ -57,21 +51,6 @@ const signupAction = (userEmail, password, passwordCheck, userName) => {
   };
 };
 
-// const userInfoDB = () => {
-//   return function (dispatch, getState, {history}) {
-//     const tokenCheck = document.cookie;
-//     const token = tokenCheck.split("=")[1]
-//     apis.userInfo(token).then((res) => {
-//       console.log(res)
-//       const userData = {
-//         email: res.data.email,
-//         nickname: res.data.nickname
-//       }
-//       dispatch(setUser(userData))
-//     }).catch((error) => console.log(error))
-//   }
-// }
-
 const logoutAction = () => {
   return function (dispatch, getState, { history }) {
     deleteCookie("token");
@@ -79,7 +58,6 @@ const logoutAction = () => {
     history.replace("/");
   };
 };
-
 
 export default handleActions(
   {
