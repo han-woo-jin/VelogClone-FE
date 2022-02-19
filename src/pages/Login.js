@@ -1,0 +1,118 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import logo from '../assets/logo.png';
+import AppLayout from '../components/AppLayout';
+import { useTheme } from '../context/themeProvider';
+import Input from '../elements/Input';
+import { FlexContainer } from '../style/styles';
+import Text from '../elements/Text';
+import { emailCheck } from '../shared/common';
+const Login = () => {
+  const ThemeMode = useTheme();
+
+  const [email, loginEmail] = React.useState("");
+  const [pw, loginPw] = React.useState("");
+  const onLogin = () => {
+    const user = {
+      email: email,
+      pw: pw,
+    };
+
+    if (!emailCheck(email) || !email) {
+      alert("이메일 형식을 다시 확인해주세요!");
+      return;
+    }
+
+    if (!pw || pw.length < 4) {
+      alert("비밀번호 입력란을 다시 확인해주세요! 비밀번호는 4자리 이상입니다");
+      return;
+    }
+    // dispatch(userActions.loginMiddleware(user));
+  };
+  return (
+
+    <StyledBox theme={ThemeMode[0]}>
+      <Text bold size="26px">
+        로그인
+      </Text>
+      <Input
+        label="이메일"
+        placeholder="이메일을 입력하세요"
+        _onChange={(e) => {
+          loginEmail(e.target.value);
+        }}
+        style={{ border: "none" }}
+      ></Input>
+      <Input
+        label="비밀번호"
+        placeholder="비밀번호을 입력하세요"
+        type="password"
+        style={{ border: "none" }}
+        _onChange={(e) => {
+          loginPw(e.target.value);
+        }}
+      ></Input>
+      <Btn
+        onClick={() => {
+          onLogin();
+        }}
+      >
+        {" "}
+        로그인{" "}
+      </Btn>
+    </StyledBox>
+
+  )
+}
+
+export default Login;
+
+const StyledBox = styled.div`
+margin: auto;
+  padding: 20px;
+  min-width: 250px;
+  width: auto;
+  height: auto;
+  color: ${props => props.theme === 'light' ? 'white' : '#121212'};
+
+background-color: ${props => props.theme === 'light' ? 'white' : '#121212'};;
+`
+
+const Btn = styled.button`
+  margin: 10px 10px 0px 0px;
+  font-size: 16px;
+  background-color: #4cbc9b;
+  color: white;
+  padding: 10px 15px;
+  font-weight: bold;
+  width: 95.99px;
+  height: 47.99px;
+  border: none;
+  position: absolute;
+  right: 36px;
+  border: none;
+
+`;
+
+const LeftMenu = styled.li`
+  font-size: 16px;
+  font-weight: 500;
+`
+const WriteBtn = styled.button`
+  border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
+  color:  ${props => props.theme === 'light' ? 'black' : 'white'};
+  cursor: pointer;
+  border-radius: 25px;
+  margin: 15px 10px 15px 0px;
+  font-size: 14px;
+  font-size: 17px;
+  padding: 10px 15px;
+  font-weight: bold;
+  border-radius: 25px;
+  &:hover {
+    background-color: ${props => props.theme === 'light' ? 'black' : 'white'};;
+    color:${props => props.theme === 'light' ? 'white' : 'black'};;
+    transition: 0.125s;
+  }
+`
