@@ -7,28 +7,29 @@ import { useTheme } from '../context/themeProvider';
 import Input from '../elements/Input';
 import { FlexContainer } from '../style/styles';
 import Text from '../elements/Text';
+import { actionCreators as userActions } from '../redux/modules/user';
 import { emailCheck } from '../shared/common';
+import { useDispatch } from 'react-redux';
+
+
 const Login = () => {
+  const dispatch = useDispatch();
   const ThemeMode = useTheme();
 
-  const [email, loginEmail] = React.useState("");
-  const [pw, loginPw] = React.useState("");
-  const onLogin = () => {
-    const user = {
-      email: email,
-      pw: pw,
-    };
+  const [userEmail, loginEmail] = React.useState("");
+  const [password, loginPw] = React.useState("");
+  const login = () => {
 
-    if (!emailCheck(email) || !email) {
+    if (!emailCheck(userEmail) || !userEmail) {
       alert("이메일 형식을 다시 확인해주세요!");
       return;
     }
 
-    if (!pw || pw.length < 4) {
+    if (!password || password.length < 4) {
       alert("비밀번호 입력란을 다시 확인해주세요! 비밀번호는 4자리 이상입니다");
       return;
     }
-    // dispatch(userActions.loginMiddleware(user));
+    dispatch(userActions.loginAction(userEmail, password));
   };
   return (
 
@@ -55,7 +56,7 @@ const Login = () => {
       ></Input>
       <Btn
         onClick={() => {
-          onLogin();
+          login();
         }}
       >
         {" "}
