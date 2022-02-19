@@ -8,39 +8,44 @@ import Input from '../elements/Input';
 import { FlexContainer } from '../style/styles';
 import Text from '../elements/Text';
 import { emailCheck } from '../shared/common';
+import { actionCreators as userActions } from "../redux/modules/user";
+import { useDispatch } from "react-redux";
+
 const Signup = () => {
   const ThemeMode = useTheme();
+  const [userEmail, setEmail] = React.useState("");
+  const [password, setPw] = React.useState("");
+  const [passwordcheck, setPwCheck] = React.useState("");
+  const [userName, setNickName] = React.useState("");
 
-  const [email, setEmail] = React.useState("");
-  const [pw, setPw] = React.useState("");
-  const [pwcheck, setPwCheck] = React.useState("");
-  const [nickname, setNickName] = React.useState("");
+  const dispatch = useDispatch();
 
-  const setSignup = () => {
-    if (email === "" || pw === "" || pwcheck === "" || nickname === "") {
+  const signup = () => {
+
+    if (userEmail === "" || password === "" || passwordcheck === "" || userName === "") {
       window.alert("아이디, 패스워드, 닉네임을 모두 입력해주세요!");
       return;
     }
     // id가 이메일 형식 확인
-    if (!emailCheck(email)) {
+    if (!emailCheck(userEmail)) {
       window.alert("이메일 형식이 맞지 않습니다!");
       return;
     }
-    if (!pw || pw.length < 4) {
+    if (!password || password.length < 4) {
       alert("비밀번호 입력란을 다시 확인해주세요! 비밀번호는 4자리 이상입니다");
       return;
     }
     // 비밀번호와 비밀번호 확인 부분이 일치하나 확인!
-    if (pw !== pwcheck) {
+    if (password !== passwordcheck) {
       window.alert("패스워드와 패스워드 확인이 일치하지 않습니다!");
       return;
     }
-    if (!nickname) {
+    if (!userName) {
       alert("사용하실 닉네임을 입력해주세요!");
       return;
     }
 
-    //dispatch(userActions.signupMiddleware(user));
+    dispatch(userActions.signupAction(userEmail, password, passwordcheck, userName));
   };
   return (
 
@@ -83,7 +88,7 @@ const Signup = () => {
       <Btn
         onClick={() => {
           console.log("회원가입!!");
-          setSignup();
+          signup();
         }}
       >
         회원가입
