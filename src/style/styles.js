@@ -10,7 +10,7 @@ export const FlexContainer = styled.div`
   padding: 0px 28px;
   transition: all 0.2s linear;
   width: calc(100%-2rem);
-  height: 90vh;
+  height: auto;
 
   & h2 {
     font-size: 48px;

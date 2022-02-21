@@ -10,10 +10,11 @@ import Text from '../elements/Text';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { emailCheck } from '../shared/common';
 import { useDispatch } from 'react-redux';
-import { history } from '../redux/configStore';
+import { useHistory } from 'react-router-dom';
 
 
 const Login = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const ThemeMode = useTheme();
 
@@ -31,7 +32,6 @@ const Login = () => {
       return;
     }
     dispatch(userActions.loginAction(userEmail, password));
-    history.push('/');
   };
   return (
 
@@ -97,25 +97,3 @@ const Btn = styled.button`
   border: none;
 
 `;
-
-const LeftMenu = styled.li`
-  font-size: 16px;
-  font-weight: 500;
-`
-const WriteBtn = styled.button`
-  border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
-  color:  ${props => props.theme === 'light' ? 'black' : 'white'};
-  cursor: pointer;
-  border-radius: 25px;
-  margin: 15px 10px 15px 0px;
-  font-size: 14px;
-  font-size: 17px;
-  padding: 10px 15px;
-  font-weight: bold;
-  border-radius: 25px;
-  &:hover {
-    background-color: ${props => props.theme === 'light' ? 'black' : 'white'};;
-    color:${props => props.theme === 'light' ? 'white' : 'black'};;
-    transition: 0.125s;
-  }
-`

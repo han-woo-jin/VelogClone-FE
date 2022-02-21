@@ -85,9 +85,9 @@ Input.defaultProps = {
 };
 
 const ElTextarea = styled.textarea`
-color: ${props => props.theme === 'light' ? '#121212' : 'white'};
+color: ${props => props.theme === 'light' ? '#1e1e1e' : 'white'};
 
-background-color: ${props => props.theme === 'light' ? '#121212' : 'white'};;
+background-color: ${props => props.theme === 'light' ? '#1e1e1e' : 'white'};;
   border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
   width: 100%;
   padding: 12px 4px;
@@ -95,8 +95,8 @@ background-color: ${props => props.theme === 'light' ? '#121212' : 'white'};;
 `;
 
 const ElInput = styled.input`
-background-color: ${props => props.theme === 'light' ? 'white' : '#121212'};
-border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
+background-color: ${props => props.theme === 'light' ? 'white' : '#1e1e1e'};
+border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid #4d4d4d'};
 color: ${props => props.theme === 'light' ? 'black' : 'white'};
   width: 100%;
   padding: 12px 4px;

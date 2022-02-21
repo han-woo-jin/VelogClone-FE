@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { useTheme } from '../context/themeProvider';
 import { FlexContainer } from '../style/styles';
 import ThemeToggle from '../theme/ThemeToggle';
-import Header from './Header';
+import DetailHeader from './DetailHeader';
 import PostList from '../pages/PostList';
 
 const AppLayout = ({ children }) => {
   const [ThemeMode, toggleTheme] = useTheme();
   return (
     <WrapContainer>
-      <Header />
+      <DetailHeader />
 
 
       <ThemeToggle toggle={toggleTheme} mode={ThemeMode}>

@@ -3,6 +3,8 @@ import { produce } from "immer";
 import { setCookie, getCookie, deleteCookie } from "../../shared/cookie";
 import axios from 'axios';
 import { apis } from '../../shared/axios';
+import { useHistory } from 'react-router-dom';
+
 
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
@@ -11,6 +13,7 @@ const SET_USER = "SET_USER";
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
 const setUser = createAction(SET_USER, (user) => ({ user }));
+
 
 const initialState = {
   // userinfo: {email: "", nickname: ""},
@@ -33,7 +36,7 @@ const loginAction = (userEmail, password) => {
       .then((res) => {
         setCookie('token', res.data.token, 7);
         dispatch(setUser({ userEmail: userEmail, }));
-        history.push('/');
+        console.log(res)
       })
       .catch((error) => {
         console.log(error);

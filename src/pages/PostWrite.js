@@ -4,11 +4,14 @@ import styled from "styled-components";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { history } from "../redux/configStore";
 import { useTheme } from '../context/themeProvider';
+import { useEffect } from 'react';
 // 마크다운 라이브러리 토스트 ui 사용
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-
+import axios from 'axios';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
+import { axapis } from '../shared/formaxios';
+
 
 const PostWrite = () => {
   const dispatch = useDispatch();
@@ -19,20 +22,102 @@ const PostWrite = () => {
     setTitle(e.target.value);
   };
 
+
+  const tokencheck = document.cookie;
+  const token = tokencheck.split("=")[1];
+
+  console.log(token)
+
+  // const editorRef = useRef();
+
+  // useEffect(() => {
+  //   if (editorRef.current) {
+  //     editorRef.current.getInstance().removeHook("addImageBlobHook");
+  //     editorRef.current
+  //       .getInstance()
+  //       .addHook("addImageBlobHook", (blob, post, callback) => {
+  //         (async () => {
+  //           let formData = new FormData();
+  //           post = {
+  //             title: "123123123123",
+  //             content: "asdfasdfasdf",
+  //           }
+  //           formData.append("imageFile", blob);
+  //           formData.append("post", new Blob([JSON.stringify(post)], { type: "application/json" }))
+
+  //           axios.defaults.withCredentials = true;
+  //           const { blob: url } = await axios.post(
+  //             "http://15.164.211.199/api/posting",
+  //             formData,
+  //             {
+  //               headers: {
+  //                 "Content-Type": "multipart/form-data",
+  //                 accept: "application/json",
+  //                 token: token,
+  //               },
+  //             }
+  //           );
+  //           callback(url, "alt text");
+  //         })();
+
+  //         return false;
+  //       });
+  //   }
+
+  //   return () => { };
+  // }, [editorRef]);
+
+
+  useEffect(() => {
+    if (contentRef.current) {
+      contentRef.current.getInstance().removeHook("addImageBlobHook");
+      contentRef.current
+        .getInstance()
+        .addHook("addImageBlobHook", (blob, post) => {
+          (async () => {
+            let formData = new FormData();
+            const post = {
+              title: "123123123123",
+              content: "asdfasdfasdf",
+            }
+            formData.append("imageFile", blob);
+            formData.append("post", new Blob([JSON.stringify(post)], { type: "application/json" }))
+
+            console.log(formData)
+            console.log()
+            await axapis.imgpost(formData)
+              .then((response) => {
+                console.log(response)
+              })
+              .catch((error) => console.log(error))
+          })();
+          return false;
+        });
+    }
+    return () => { };
+  }, [contentRef]);
+
   const addPost = () => {
     // 마크다운 언어를 서버에 저장하기위해서 변형함
     const contentHTML = contentRef.current.getInstance().getHTML();
     const contentMarkdown = contentRef.current.getInstance().getMarkdown();
 
+    const content = contentMarkdown.replaceAll("#", "").split("!")[0];
+    console.log(contentMarkdown)
+
     const hello = contentMarkdown.split("](")[1];
-    const image = hello.split(")")[0];
+    // const image = hello.split(")")[0];
+
+    console.log(hello)
+    let formData = new FormData()
     const post = {
       title: title,
-      content: contentMarkdown,
-      image: image,
+      content: content,
+      // image: image,
     };
+
     console.log(post);
-    // dispatch(postActions.addPostMD(post));
+    dispatch(postActions.addPostAction(post));
   };
 
   const ThemeMode = useTheme();
@@ -48,7 +133,7 @@ const PostWrite = () => {
             ref={contentRef}
             previewStyle="vertical"
             width="100%"
-            height="83vh"
+            height="100vh"
             initialEditType="markdown"
             useCommandShortcut={true}
             placeholder="당신의 이야기를 적어보세요"

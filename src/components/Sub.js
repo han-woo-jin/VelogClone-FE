@@ -1,20 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-import AppLayout from './AppLayout';
+import DetailLayout from './DetailLayout';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../context/themeProvider';
+import PostDetail from "../pages/PostDetail"
 
 const Sub = () => {
   const ThemeMode = useTheme();
   return (
-    <AppLayout>
-      <h2> ...SubPage </h2>
-      <Link to='/'>
-        <StyledButton theme={ThemeMode[0]}>
-          Go back to Home
-        </StyledButton>
-      </Link>
-    </AppLayout>
+    <DetailLayout>
+      <PostDetail />
+    </DetailLayout>
   )
 }
 

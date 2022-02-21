@@ -10,14 +10,20 @@ import Text from '../elements/Text';
 import { emailCheck } from '../shared/common';
 import { actionCreators as userActions } from "../redux/modules/user";
 import { useDispatch } from "react-redux";
+import { useHistory } from 'react-router-dom';
 
-const Signup = () => {
+const Signup = (props) => {
+  const history = useHistory();
   const ThemeMode = useTheme();
   const [userEmail, setEmail] = React.useState("");
   const [password, setPw] = React.useState("");
   const [passwordcheck, setPwCheck] = React.useState("");
   const [userName, setNickName] = React.useState("");
+  const [modalOpen, setModalOpen] = React.useState(false);
 
+  const modalClose = () => {
+    setModalOpen(!modalOpen);
+  };
   const dispatch = useDispatch();
   const signup = () => {
 
@@ -46,6 +52,8 @@ const Signup = () => {
     }
 
     dispatch(userActions.signupAction(userEmail, password, passwordcheck, userName));
+    // dispatch(userActions.loginAction(userEmail, password));
+
   };
   return (
 

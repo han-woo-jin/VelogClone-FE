@@ -21,7 +21,7 @@ const Modal = ({ modalClose }) => {
   // };
 
   return (
-    <AppLayout>
+    <>
       <Container>
         <ModalBox>
           <WelcomeBox theme={ThemeMode[0]}>
@@ -55,7 +55,7 @@ const Modal = ({ modalClose }) => {
           </UserBox>
         </ModalBox>
       </Container>
-    </AppLayout>
+    </>
   )
 }
 
@@ -92,7 +92,7 @@ const WelcomeBox = styled.div`
   padding: 24px;
   width: 250px;
   height: 450px;
-  background-color:  ${props => props.theme === 'light' ? '#f1f3f5' : 'gray'};
+  background-color:  ${props => props.theme === 'light' ? '#f8f9fa' : '#1e1e1e'};
 `;
 
 
@@ -107,10 +107,10 @@ const WelcomeText = styled.text`
 `;
 
 const WelcomeImg = styled.img`
-background-color:  ${props => props.theme === 'light' ? '#f1f3f5' : 'gray'};
+background-color:  ${props => props.theme === 'light' ? '#f8f9fa' : '#1e1e1e'};
   margin-top: 100px;
   width: 200px;
-  height: 200px;
+  height: 150px;
 `;
 const UserBox = styled.div`
   padding: 24px;

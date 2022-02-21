@@ -10,7 +10,7 @@ import Modal from '../components/Modal';
 import PostWrite from '../pages/PostWrite';
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "../redux/configStore";
-
+import PostDetail from "../pages/PostDetail"
 function App() {
   return (
     <ConnectedRouter history={history}>
@@ -18,6 +18,8 @@ function App() {
         <GlobalStyle />
         <Suspense fallback={<div>...loading</div>}>
           <Switch>
+
+            <Route exact path="/postdetail" component={PostDetail} />
             <Route exact path="/postwrite" component={PostWrite} />
             <Route exact path="/modal" component={Modal} />
             <Route exact path="/login" component={Login} />

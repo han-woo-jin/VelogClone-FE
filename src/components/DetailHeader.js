@@ -10,7 +10,7 @@ import { actionCreators as userActions } from '../redux/modules/user';
 import Nav from './Nav';
 import { AiFillCaretDown } from "react-icons/ai";
 
-const Header = (props) => {
+const DetailHeader = (props) => {
   const dispatch = useDispatch();
   const user = document.cookie
   // const user = true;
@@ -49,7 +49,7 @@ const Header = (props) => {
         <StyledHeader>
           <RightMenu theme={ThemeMode[0]}>
             <Link to='/' >
-              velog
+              nickname.log
             </Link>
           </RightMenu>
           <LeftMenu>
@@ -76,7 +76,7 @@ const Header = (props) => {
       <StyledHeader>
         <RightMenu theme={ThemeMode[0]}>
           <Link to='/' >
-            velog
+            nickname.log
           </Link>
         </RightMenu>
         <LeftMenu>
@@ -96,7 +96,7 @@ const Header = (props) => {
 
 }
 
-export default Header;
+export default DetailHeader;
 
 const StyledHeader = styled.div`
   display: flex;

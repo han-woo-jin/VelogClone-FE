@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useTheme } from '../context/themeProvider';
+import PostList from '../pages/PostList';
 import AppLayout from './AppLayout';
+import Card from './Card';
 
 const Main = () => {
   const ThemeMode = useTheme();
@@ -9,24 +11,7 @@ const Main = () => {
 
   return (
     <AppLayout>
-      <h2> Welcome to {''}
-        <a
-          href="https://github.com/gparkkii/react_darkmode"
-          target="_blank"
-          rel="noreferrer noopener"
-        >
-          Darkmode!
-        </a>
-        <br />
-        <ColoredText>Current mode is {CurrentMode}</ColoredText>
-      </h2>
-      <a
-        href="https://github.com/gparkkii"
-        target="_blank"
-        rel="noreferrer noopener"
-      >
-        All rights reserved by Ji Yeon Park
-      </a>
+      <PostList />
     </AppLayout>
   )
 }
