@@ -14,7 +14,6 @@ const Card = (props) => {
   const ThemeMode = useTheme();
   const history = useHistory();
   const dispatch = useDispatch();
-  console.log(props.title)
   // const postList = useSelector((state) => state.post.list);
 
   // console.log(postList.content)
@@ -33,10 +32,11 @@ const Card = (props) => {
   // const content = postList[props.index].content.split("![")[0];
   // const hashContent = content.replaceAll("#", "");
   // const starContent = hashContent.replaceAll("*", "");
-  const orange = props.content.split(")")[1];
+
   const apple = props.content.split("!")[0];
-  console.log(apple)
-  console.log(orange)
+  const orange = props.content.split(")")[1];
+
+
   return (
     <>
       <CardWrap
@@ -48,7 +48,7 @@ const Card = (props) => {
         <CardImg src={props.imageUrl} />
         <Body>
           <Title>{props.title}</Title>
-          <Description>{props.content}</Description>
+          <Description>{apple === "" ? orange : apple}</Description>
           <DtCmt>
             <span>
               <span>{props.postModifiedAt}</span>
