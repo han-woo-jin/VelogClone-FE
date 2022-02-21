@@ -15,7 +15,8 @@ import { axapis } from '../shared/formaxios';
 
 const PostWrite = () => {
   const dispatch = useDispatch();
-  const contentRef = useRef();
+
+  const editorRef = useRef();
   const [title, setTitle] = useState("");
 
   const titleChange = (e) => {
@@ -23,102 +24,107 @@ const PostWrite = () => {
   };
 
 
-  const tokencheck = document.cookie;
-  const token = tokencheck.split("=")[1];
-
-  console.log(token)
-
-  // const editorRef = useRef();
-
-  // useEffect(() => {
-  //   if (editorRef.current) {
-  //     editorRef.current.getInstance().removeHook("addImageBlobHook");
-  //     editorRef.current
-  //       .getInstance()
-  //       .addHook("addImageBlobHook", (blob, post, callback) => {
-  //         (async () => {
-  //           let formData = new FormData();
-  //           post = {
-  //             title: "123123123123",
-  //             content: "asdfasdfasdf",
-  //           }
-  //           formData.append("imageFile", blob);
-  //           formData.append("post", new Blob([JSON.stringify(post)], { type: "application/json" }))
-
-  //           axios.defaults.withCredentials = true;
-  //           const { blob: url } = await axios.post(
-  //             "http://15.164.211.199/api/posting",
-  //             formData,
-  //             {
-  //               headers: {
-  //                 "Content-Type": "multipart/form-data",
-  //                 accept: "application/json",
-  //                 token: token,
-  //               },
-  //             }
-  //           );
-  //           callback(url, "alt text");
-  //         })();
-
-  //         return false;
-  //       });
-  //   }
-
-  //   return () => { };
-  // }, [editorRef]);
 
 
+  const handleClick = () => {
+    const content = editorRef.current.getInstance().getMarkdown();
+
+    console.log(content);
+  };
+  const token = document.cookie.split("=")[1];
   useEffect(() => {
-    if (contentRef.current) {
-      contentRef.current.getInstance().removeHook("addImageBlobHook");
-      contentRef.current
+
+    if (editorRef.current) {
+      // 기존에 Image 를 Import 하는 Hook 을 제거한다.
+      editorRef.current.getInstance().removeHook("addImageBlobHook");
+
+      // 새롭게 Image 를 Import 하는 Hook 을 생성한다.
+      editorRef.current
         .getInstance()
-        .addHook("addImageBlobHook", (blob, post) => {
+        .addHook("addImageBlobHook", (blob, callback) => {
           (async () => {
             let formData = new FormData();
             const post = {
               title: "123123123123",
               content: "asdfasdfasdf",
             }
+
             formData.append("imageFile", blob);
             formData.append("post", new Blob([JSON.stringify(post)], { type: "application/json" }))
 
-            console.log(formData)
-            console.log()
-            await axapis.imgpost(formData)
-              .then((response) => {
-                console.log(response)
+
+            await axapis.imgpost(
+              formData
+            )
+              .then((res) => {
+                console.log(res)
+                const imageUrl = res.data;
+
+                // Image 를 가져올 수 있는 URL 을 callback 메서드에 넣어주면 자동으로 이미지를 가져온다.
+                callback(imageUrl, "image");
               })
-              .catch((error) => console.log(error))
+
           })();
+
           return false;
         });
     }
+
     return () => { };
-  }, [contentRef]);
+  }, [editorRef]);
 
-  const addPost = () => {
-    // 마크다운 언어를 서버에 저장하기위해서 변형함
-    const contentHTML = contentRef.current.getInstance().getHTML();
-    const contentMarkdown = contentRef.current.getInstance().getMarkdown();
 
-    const content = contentMarkdown.replaceAll("#", "").split("!")[0];
-    console.log(contentMarkdown)
+  // useEffect(() => {
+  //   if (contentRef.current) {
+  //     contentRef.current.getInstance().removeHook("addImageBlobHook");
+  //     contentRef.current
+  //       .getInstance()
+  //       .addHook("addImageBlobHook", (blob, post) => {
+  //         (async () => {
+  //           let formData = new FormData();
+  //           const post = {
+  //             title: "123123123123",
+  //             content: "asdfasdfasdf",
+  //           }
+  //           formData.append("imageFile", blob);
+  //           formData.append("post", new Blob([JSON.stringify(post)], { type: "application/json" }))
 
-    const hello = contentMarkdown.split("](")[1];
-    // const image = hello.split(")")[0];
+  //           console.log(formData)
+  //           console.log()
+  //           await axapis.imgpost(formData)
+  //             .then((response) => {
+  //               console.log(response)
+  //             })
+  //             .catch((error) => console.log(error))
+  //         })();
+  //         return false;
+  //       });
+  //   }
+  //   return () => { };
+  // }, [contentRef]);
 
-    console.log(hello)
-    let formData = new FormData()
-    const post = {
-      title: title,
-      content: content,
-      // image: image,
-    };
+  // const addPost = () => {
+  //   // 마크다운 언어를 서버에 저장하기위해서 변형함
+  //   const contentHTML = contentRef.current.getInstance().getHTML();
+  //   const contentMarkdown = contentRef.current.getInstance().getMarkdown();
 
-    console.log(post);
-    dispatch(postActions.addPostAction(post));
-  };
+  //   const content = contentMarkdown.replaceAll("#", "").split("!")[0];
+  //   console.log(contentMarkdown)
+
+  //   const hello = contentMarkdown.split("](")[1];
+  //   // const image = hello.split(")")[0];
+
+  //   console.log(hello)
+  //   let formData = new FormData()
+  //   const post = {
+  //     title: title,
+  //     content: content,
+  //     // image: image,
+  //   };
+
+  //   console.log(post);
+  //   dispatch(postActions.addPostAction(post));
+  // };
 
   const ThemeMode = useTheme();
   const CurrentMode = ThemeMode[0] === 'light' ? 'null' : 'dark';
@@ -130,7 +136,7 @@ const PostWrite = () => {
         </Head>
         <Body>
           <Editor
-            ref={contentRef}
+            ref={editorRef}
             previewStyle="vertical"
             width="100%"
             height="100vh"
@@ -153,7 +159,7 @@ const PostWrite = () => {
             <SaveBtn onClick={() => window.alert("힝 속았지~ 😎")}>
               임시저장
             </SaveBtn>
-            <SubmitBtn onClick={addPost}>출간하기</SubmitBtn>
+            <SubmitBtn onClick={handleClick}>출간하기</SubmitBtn>
           </div>
 
         </Footer>

@@ -32,6 +32,8 @@ const Login = () => {
       return;
     }
     dispatch(userActions.loginAction(userEmail, password));
+
+    history.push('/')
   };
   return (
 

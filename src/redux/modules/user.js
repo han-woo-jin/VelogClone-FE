@@ -5,7 +5,6 @@ import axios from 'axios';
 import { apis } from '../../shared/axios';
 import { useHistory } from 'react-router-dom';
 
-
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
 const SET_USER = "SET_USER";
@@ -36,7 +35,9 @@ const loginAction = (userEmail, password) => {
       .then((res) => {
         setCookie('token', res.data.token, 7);
         dispatch(setUser({ userEmail: userEmail, }));
-        console.log(res)
+
+        document.location.reload();
+        console.log(res, "로그인 성공")
       })
       .catch((error) => {
         console.log(error);
@@ -49,7 +50,15 @@ const signupAction = (userEmail, password, passwordCheck, userName) => {
   return function (dispatch, getState, { history }) {
     apis
       .signup(userEmail, password, passwordCheck, userName)
-      .then((res) => console.log(res, "회원가입 성공"))
+      .then((res) => {
+
+        setCookie('token', res.data.token, 7);
+        dispatch(setUser({ userEmail: userEmail, userName: userName }))
+        document.location.reload();
+        history.replace("/");
+
+      })
+
       .catch((error) => console.log(error));
   };
 };

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-
+import { useTheme } from '../context/themeProvider';
 // JS파일
 import { actionCreators as userActions } from '../redux/modules/user'
 
 const Nav = (props) => {
 
+  const ThemeMode = useTheme();
   const dispatch = useDispatch()
 
   // props.nav (false or true)
@@ -29,10 +30,10 @@ const Nav = (props) => {
   return (
     <React.Fragment>
       {nav
-        ? <NavBar>
-          <NavList>내 글 보기</NavList>
-          <NavList>좋아요</NavList>
-          <NavList onClick={signOut}>로그아웃</NavList>
+        ? <NavBar theme={ThemeMode[0]}>
+          <NavList theme={ThemeMode[0]}>내 글 보기</NavList>
+          <NavList theme={ThemeMode[0]}>좋아요</NavList>
+          <NavList onClick={signOut} theme={ThemeMode[0]}>로그아웃</NavList>
         </NavBar>
         : null
       }
@@ -42,10 +43,12 @@ const Nav = (props) => {
 
 // NavBar component
 const NavBar = styled.nav`
+    
     position:absolute;
     width: auto;
     top: 60px;
     margin-right: 110px;
+    border: ${props => props.theme === 'light' ? '0.5px solid black' : '0.5px solid white'};
     margin-top: 5px;
     right:0;
     z-index:10;
@@ -54,8 +57,10 @@ const NavBar = styled.nav`
 
 // NavList component
 const NavList = styled.div`
+    border: ${props => props.theme === 'light' ? '0.5px solid black' : '0.5px solid white'};
+
+    background-color: ${props => props.theme === 'dark' ? 'black' : 'white'};
     width:150px;
-    background: #fff;
     padding:14px;
     cursor:pointer;
     &:hover {

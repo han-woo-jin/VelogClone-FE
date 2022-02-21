@@ -63,7 +63,7 @@ const Card = (props) => {
 };
 
 const CardWrap = styled.div`
-background-color: ${props => props.theme === 'light' ? '#f0f0f0' : '#1e1e1e'};
+background-color: ${props => props.theme === 'light' ? '#f5f6f7' : '#1e1e1e'};
   width: 100%;
   border-radius: 4px;
   box-shadow: rgb(0 0 0 / 4%) 0px 4px 16px 0px;
