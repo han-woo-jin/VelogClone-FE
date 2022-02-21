@@ -1,0 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code&family=Fira+Mono&display=swap");
+.App {
+  font-family: "Fira Code", monospace;
+  font-family: "Fira Mono", monospace;
+}
