@@ -48,23 +48,22 @@ const NavBar = styled.nav`
     width: auto;
     top: 60px;
     margin-right: 110px;
-    border: ${props => props.theme === 'light' ? '0.5px solid black' : '0.5px solid white'};
     margin-top: 5px;
     right:0;
     z-index:10;
-    box-shadow:0px 0px 1px 2px #eee;
 `
 
 // NavList component
 const NavList = styled.div`
-    border: ${props => props.theme === 'light' ? '0.5px solid black' : '0.5px solid white'};
 
-    background-color: ${props => props.theme === 'dark' ? 'black' : 'white'};
+    border: ${props => props.theme === 'light' ? '0.5px solid #1e1e1e' : '0.5px solid #3c3c3c'};
+    background-color: ${props => props.theme === 'dark' ? '#1e1e1e' : 'white'};
     width:150px;
     padding:14px;
     cursor:pointer;
     &:hover {
-        background-color:rgb(248, 249, 250);
+    background-color: ${props => props.theme === 'dark' ? 'white' : '#3c3c3c'};
+    color: ${props => props.theme === 'dark' ? '#3c3c3c' : 'white'};
     };
 `
 export default Nav

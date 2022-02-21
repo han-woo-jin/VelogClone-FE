@@ -5,16 +5,20 @@ import styled from "styled-components";
 import { useTheme } from '../context/themeProvider';
 // import profile from "../assets/profile.png";
 
-import { actionCreators as postActions } from "../redux/modules/post";
+import post, { actionCreators as postActions } from "../redux/modules/post";
 
 const Card = (props) => {
-
+  // React.useEffect(() => {
+  //   dispatch(postActions.getPostAction());
+  // }, []);
   const ThemeMode = useTheme();
   const history = useHistory();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  console.log(props.title)
   // const postList = useSelector((state) => state.post.list);
 
-  // // 게시물추가 할때 올렸던 이미지 카드에 추가
+  // console.log(postList.content)
+  // // // 게시물추가 할때 올렸던 이미지 카드에 추가
   // const image = postList[props.index].image;
 
   // // 게시물 작성 날짜
@@ -29,38 +33,48 @@ const Card = (props) => {
   // const content = postList[props.index].content.split("![")[0];
   // const hashContent = content.replaceAll("#", "");
   // const starContent = hashContent.replaceAll("*", "");
-
-  // React.useEffect(() => {
-  //   dispatch(postActions.getPostMD());
-  // }, []);
-
+  const orange = props.content.split(")")[1];
+  const apple = props.content.split("!")[0];
+  console.log(apple)
+  console.log(orange)
   return (
     <>
       <CardWrap
         theme={ThemeMode[0]}
         onClick={() => {
-          history.push();
+          history.push(`/postdetail/${props.postId}`);
         }}
       >
-        <CardImg src={"https://media.vlpt.us/images/sinclebear/post/271726ed-6313-42c0-8e1d-a2b29f32f6df/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"} />
+        <CardImg src={props.imageUrl} />
         <Body>
-          <Title>제목</Title>
-          <Description>설명</Description>
-          <Date>2022.02.20</Date>
+          <Title>{props.title}</Title>
+          <Description>{props.content}</Description>
+          <DtCmt>
+            <span>
+              <span>{props.postModifiedAt}</span>
+              {" ∙ "}
+              <span>{props.commentCnt}개의 댓글</span>
+            </span>
+          </DtCmt>
         </Body>
         <Footer theme={ThemeMode[0]}>
           <FooterLeft>
             <Span>by</Span>
-            <UserName>한우진</UserName>
+            <UserName>{props.postUserName}</UserName>
           </FooterLeft>
           <Like>
-            <span>100</span>
+            <span>{props.likeCnt}</span>
           </Like>
         </Footer>
       </CardWrap>
     </>
   );
 };
+
+const DtCmt = styled.div`
+  font-size: 0.75rem;
+  color: gray;
+`;
 
 const CardWrap = styled.div`
 background-color: ${props => props.theme === 'light' ? '#f5f6f7' : '#1e1e1e'};
@@ -119,7 +133,7 @@ const Description = styled.p`
   margin: 0 0 24px;
   width: 288.02px;
   height: 72.986px;
-  font-weight: 300;
+  color: gray;
   font-size: 14px;
   line-height: 1.5;
   display: inline-block;

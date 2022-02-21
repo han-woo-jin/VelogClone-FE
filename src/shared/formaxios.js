@@ -21,8 +21,8 @@ instance.interceptors.request.use(function (config) {
 
 export const axapis = {
 
-  createPost: (formData) => instance.post("/api/meeting", formData),
+  createPost: (formData) => instance.post("/api/posting", formData, { withCredentials: true }),
   edPost: (id, formData) => instance.put(`/api/meeting/${id}`, formData),
-  imgpost: (formData) => instance.post("/api/posting", formData, { withCredentials: true }),
+  imgpost: (formData) => instance.post("/api/upload", formData, { withCredentials: true }),
 
 }

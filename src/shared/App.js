@@ -24,7 +24,7 @@ function App() {
             <Route exact path="/modal" component={Modal} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/" component={Main} />
-            <Route exact path="/sub" component={Sub} />
+            <Route exact path="/postdetail/:postId" component={Sub} />
           </Switch>
         </Suspense>
       </ThemeProvider>

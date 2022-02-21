@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Card from "../components/Card";
 import { actionCreators as postActions } from "../redux/modules/post";
 import Header from "../components/Header";
+import { apis } from "../shared/axios";
 
 // React Icons
 import { ImClock } from "react-icons/im";
@@ -19,6 +20,17 @@ const PostList = () => {
   // React.useEffect(() => {
   //   dispatch(postActions.getPostMD());
   // }, []);
+
+  const [post_list, setPostList] = useState([]);
+
+  useEffect(() => {
+    apis.getPost()
+      .then(function (response) {
+        setPostList(response.data)
+      }).catch(function (error) {
+        console.log(error)
+      })
+  }, [])
 
   return (
     <>
@@ -90,20 +102,9 @@ const PostList = () => {
         }}
       >
         <Grid>
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          {/* {postList.map((post, index) => {
-            return <Card />;
-          })} */}
+          {post_list.map((post, index) => {
+            return <Card key={index} {...post} />
+          })}
         </Grid>
       </div>
     </>

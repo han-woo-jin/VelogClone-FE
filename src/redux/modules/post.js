@@ -15,7 +15,7 @@ const GET_POST = "GET_POST"
 
 //Action create
 const getPost = createAction(GET_POST, (postlist) => ({ postlist }));
-const setPost = createAction(SET_POST, (postlist) => ({ postlist }))
+const setPost = createAction(SET_POST, (post) => ({ post }))
 const addPost = createAction(ADD_POST, (post) => ({ post }))
 const editPost = createAction(EDIT_POST, (post, post_Id) => ({ post, post_Id }))
 const delPost = createAction(DEL_POST, (post_Id) => ({ post_Id }))
@@ -37,21 +37,31 @@ const setPostAction = () => {
   }
 }
 
-const getPostAction = () => {
+const getPostAction = (postId, post) => {
   return function (dispatch, getState, { history }) {
     apis.getPost()
-      .then((response) => {
-        dispatch(getPost(response.data));
+      .then((res) => {
+        const postList = res.data;
+        if (postId) {
+          const post = postList.filter((post) => postId === postId[0]);
+          const title = postList.title;
+          const content = postList.content;
+          const image = postList.imageUrl;
+          dispatch(getPost(post, title, content, image));
+        } else {
+          dispatch(getPost(postList));
+        }
       })
-      .error((error) => console.log(error))
-  }
+      .catch((err) => { });
+  };
 }
 
 
-const addPostAction = (formData) => {
+const addPostAction = (ImgId) => {
   return function (dispatch, getState, { history }) {
-    axapis.createPost(formData)
+    apis.createPost(ImgId)
       .then((response) => {
+
         console.log(response)
         history.replace('/')
       })

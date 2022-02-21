@@ -39,11 +39,16 @@ export const apis = {
     ),
 
   // 게시물 불러오기
-  getPost: () => instance.get("/api/meeting"),
+  getPost: () => instance.get("/api/posting"),
   // 게시물 한개불러오기
   // getOnePost: (meetingId) => instance.get(`/api/meeting/${meetingId}`),
   // 게시물 작성하기
-  createPost: (contents) => instance.post("/api/meeting", contents),
+  createPost: (ImgId, content, title) => instance.post(`/api/posting/${ImgId}`, {
+    content: content,
+    title: title,
+  },
+    { withCredentials: true }
+  ),
   // 게시물 수정하기
   edPost: (meetingId) => instance.patch(`/api/meeting/${meetingId}`),
   // 게시물 삭제하기

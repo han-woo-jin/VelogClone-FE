@@ -11,10 +11,13 @@ import { Editor } from "@toast-ui/react-editor";
 import axios from 'axios';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import { axapis } from '../shared/formaxios';
+import { apis, instance } from '../shared/axios';
 
 
 const PostWrite = () => {
   const dispatch = useDispatch();
+  const [ImgUrl, setImgUrl] = useState("");
+  const [ImgId, setImgId] = useState("");
 
   const editorRef = useRef();
   const [title, setTitle] = useState("");
@@ -29,41 +32,32 @@ const PostWrite = () => {
   const handleClick = () => {
     const content = editorRef.current.getInstance().getMarkdown();
 
-    console.log(content);
+    console.log(content, title);
   };
   const token = document.cookie.split("=")[1];
-  useEffect(() => {
 
+  useEffect(() => {
     if (editorRef.current) {
       // 기존에 Image 를 Import 하는 Hook 을 제거한다.
       editorRef.current.getInstance().removeHook("addImageBlobHook");
-
       // 새롭게 Image 를 Import 하는 Hook 을 생성한다.
       editorRef.current
         .getInstance()
         .addHook("addImageBlobHook", (blob, callback) => {
           (async () => {
             let formData = new FormData();
-            const post = {
-              title: "123123123123",
-              content: "asdfasdfasdf",
-            }
-
             formData.append("imageFile", blob);
-            formData.append("post", new Blob([JSON.stringify(post)], { type: "application/json" }))
-
-
             await axapis.imgpost(
               formData
             )
               .then((res) => {
                 console.log(res)
-                const imageUrl = res.data;
-
-                // Image 를 가져올 수 있는 URL 을 callback 메서드에 넣어주면 자동으로 이미지를 가져온다.
+                const imageUrl = res.data.imageUrl;
+                setImgUrl(res.data.imageUrl)
+                setImgId(res.data.imageId)
                 callback(imageUrl, "image");
               })
-
+              .catch((error) => console.log(error));
           })();
 
           return false;
@@ -103,28 +97,18 @@ const PostWrite = () => {
   //   return () => { };
   // }, [contentRef]);
 
-  // const addPost = () => {
-  //   // 마크다운 언어를 서버에 저장하기위해서 변형함
-  //   const contentHTML = contentRef.current.getInstance().getHTML();
-  //   const contentMarkdown = contentRef.current.getInstance().getMarkdown();
+  const addPost = () => {
+    // 마크다운 언어를 서버에 저장하기위해서 변형함
+    const content = editorRef.current.getInstance().getMarkdown();
+    const id = ImgId
+    console.log(id, title, content)
+    apis.createPost(id, content, title)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((error) => console.log(error, id, title, content))
 
-  //   const content = contentMarkdown.replaceAll("#", "").split("!")[0];
-  //   console.log(contentMarkdown)
-
-  //   const hello = contentMarkdown.split("](")[1];
-  //   // const image = hello.split(")")[0];
-
-  //   console.log(hello)
-  //   let formData = new FormData()
-  //   const post = {
-  //     title: title,
-  //     content: content,
-  //     // image: image,
-  //   };
-
-  //   console.log(post);
-  //   dispatch(postActions.addPostAction(post));
-  // };
+  };
 
   const ThemeMode = useTheme();
   const CurrentMode = ThemeMode[0] === 'light' ? 'null' : 'dark';
@@ -159,7 +143,7 @@ const PostWrite = () => {
             <SaveBtn onClick={() => window.alert("힝 속았지~ 😎")}>
               임시저장
             </SaveBtn>
-            <SubmitBtn onClick={handleClick}>출간하기</SubmitBtn>
+            <SubmitBtn onClick={addPost}>출간하기</SubmitBtn>
           </div>
 
         </Footer>
