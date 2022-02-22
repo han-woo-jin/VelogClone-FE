@@ -1,66 +1,77 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators as commentAction } from "../redux/modules/comment";
 import CommentList from "./CommentList";
 import { history } from "../redux/configStore";
+
+import { actionCreators as commentActions } from "../redux/modules/comment";
 import { useTheme } from '../context/themeProvider';
+
 const CommentWrite = (props) => {
   const dispatch = useDispatch();
 
   const ThemeMode = useTheme();
-  const url = useSelector((state) => state.router);
-  const postId = url.location.pathname.slice(8);
-  const [content, setContent] = React.useState("");
-  const commentList = useSelector((state) => state.comment.commentList);
+  const [comments, setComments] = React.useState("");
+  // const commentList = useSelector((state) => state.comment.commentList);
   const isLogIn = useSelector((state) => state.user.isLogIn);
 
   // useEffect(() => {
   //   dispatch(commentAction.getCommentDB(postId));
   // }, []);
 
+  const postId = props.postId
+  const comment = props.comment
+  const commentId = props.commentId
+  const commentModifiedAt = props.commentModifiedAt
+  const commentUserName = props.commentUserName
+  const commentList = props.commentList
+
+
   const onChange = (e) => {
-    setContent(e.target.value);
+    setComments(e.target.value);
   };
 
-  const setAddComment = () => {
-    const comment = {
-      postId: postId,
-      content: content,
-    };
+  const addComment = () => {
 
-    if (content === "") {
-      window.alert("내용을 입력해주세요.");
-    }
-    if (isLogIn === false) {
-      window.alert("로그인 후 이용해 주세요.");
-      history.push("/login");
-    }
-    // dispatch(commentAction.addCommentDB(comment));
-    // dispatch(commentAction.getCommentDB(postId));
-    // setContent("");
+
+    // if (content === "") {
+    //   window.alert("내용을 입력해주세요.");
+    // }
+    // if (isLogIn === false) {
+    //   window.alert("로그인 후 이용해 주세요.");
+    //   history.push("/login");
+    // }
+    dispatch(commentActions.addCommentAction(postId, comments));
+    document.location.reload();
   };
 
   return (
     <React.Fragment>
-      <Count>{commentList?.length}개의 댓글</Count>
+      {/* <Count>{commentList?.length}개의 댓글</Count> */}
       <Container>
         <Input
           theme={ThemeMode[0]}
           placeholder="댓글을 작성하세요"
           onChange={onChange}
-          value={content}
+          value={comments}
         />
         <Button
           onClick={() => {
-            setAddComment();
+            addComment();
           }}
         >
           댓글 작성
         </Button>
       </Container>
 
-      <CommentList></CommentList>
+      <CommentList
+        postId={postId}
+        commentList={commentList}
+        comment={comment}
+        commentId={commentId}
+        commentModifiedAt={commentModifiedAt}
+        commentUserName={commentUserName}
+      ></CommentList>
     </React.Fragment>
   );
 };

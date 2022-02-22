@@ -5,55 +5,39 @@ import { useDispatch } from "react-redux";
 import { actionCreators as commentAction } from "../redux/modules/comment";
 
 const CommentItem = (props) => {
-  const { commentId, nickname, content, regdate, index } = props;
-  const url = useSelector((state) => state.router);
-  const postId = url.location.pathname.slice(8);
+
   const dispatch = useDispatch();
 
-  // 댓글유저ID
-  const userEmail = useSelector(
-    (state) => state.comment.commentList[props.index].user.email
-  );
-  const userId = useSelector(
-    (state) => state.comment.commentList[props.index].user.email.split("@")[0]
-  );
+  const loginUser = localStorage.getItem("userName")
+  const commentList = props.commentList;
 
-  //댓글 작성 시간
-  const modDate = useSelector(
-    (state) => state.comment.commentList[props.index].modDate.split("T")[0]
-  );
-  const yearMonthDay = modDate.split("-");
-  const year = yearMonthDay[0];
-  const month = yearMonthDay[1];
-  const day = yearMonthDay[2];
-  const writtenDate = year + "년 " + month + "월 " + day + "일";
+  const id = props.postId
+  const comment = props.comment
+  const commentId = props.commentId
+  const commentModifiedAt = props.commentModifiedAt
+  const commentUserName = props.commentUserName
 
-  const loginUser = useSelector((state) => state.user.user.sub);
 
-  React.useEffect(() => {
-    dispatch(commentAction.getCommentDB(postId));
-  }, []);
 
   const handleDelete = () => {
-    const result = window.confirm("댓글을 정말로 삭제하시겠습니까?");
-
-    if (result) {
-      dispatch(commentAction.removeCommentDB(commentId));
-    }
+    // const result = window.confirm("댓글을 정말로 삭제하시겠습니까?");
+    // if (result) {
+    //   dispatch(commentAction.removeCommentDB(commentId));
+    // }
   };
 
   const handleModify = () => { };
 
-  if (userEmail === loginUser) {
+  if (commentUserName === loginUser) {
     return (
       <React.Fragment>
         <Container>
           <User>
             <UserInfo>
-              <img src={"/img/profile.png"} />
+              <img alt='' src={"/img/profile.png"} />
               <div style={{ margin: "auto" }}>
-                <UserName>{userId}</UserName>
-                <Time>{writtenDate}</Time>
+                <UserName>{commentUserName}</UserName>
+                <Time>{commentModifiedAt}</Time>
               </div>
             </UserInfo>
             <Edit>
@@ -61,7 +45,7 @@ const CommentItem = (props) => {
               <span onClick={handleDelete}>삭제</span>
             </Edit>
           </User>
-          <Content>{content}</Content>
+          <Content>{comment}</Content>
           <PlusComment>
             <span>
               <i className="xi-plus-square-o"></i>
@@ -78,14 +62,14 @@ const CommentItem = (props) => {
       <Container>
         <User>
           <UserInfo>
-            <img src={"/img/profile.png"} />
+            <img alt='' src={"/img/profile.png"} />
             <div style={{ margin: "auto" }}>
-              <UserName>{userId}</UserName>
-              <Time>{writtenDate}</Time>
+              <UserName>{commentUserName}</UserName>
+              <Time>{commentModifiedAt}</Time>
             </div>
           </UserInfo>
         </User>
-        <Content>{content}</Content>
+        <Content>{comment}</Content>
         <PlusComment>
           <span>
             <i className="xi-plus-square-o"></i>

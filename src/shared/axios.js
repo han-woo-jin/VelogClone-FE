@@ -61,7 +61,10 @@ export const apis = {
   // 댓글 불러오기
   getComment: (meetingId) => instance.get(`api/meeting/${meetingId}`),
   // 댓글 작성하기
-  createComment: (meetingId, content) => instance.post(`api/meeting/${meetingId}/comments`, content),
+  createComment: (postId, comment) => instance.post("api/comment", {
+    postId: postId,
+    comment: comment
+  }),
   // 댓글 수정하기
   // editComment: (meetingId, content, commentId) => instance.put(`api/meeting/${meetingId}/comments/${commentId}`, content),
   // 댓글 삭제하기

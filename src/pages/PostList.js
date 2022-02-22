@@ -113,7 +113,7 @@ const PostList = (props) => {
                   history.push(`/detail/${post.postId}`)
                 } else {
                   window.alert('로그인 먼저 해주세요!')
-                  history.push('/login')
+                  history.push('/')
                 }
               }}>
 

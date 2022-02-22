@@ -1,113 +1,99 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import { apis } from '../../shared/axios';
+import "moment";
+import { instance } from "../../shared/axios";
+import { apis } from "../../shared/axios";
+import { axapis } from "../../shared/axios";
 
-// actions Type
+//action
+const SET_COMMENT = "SET_COMMENT";
 const ADD_COMMENT = "ADD_COMMENT";
-const REMOVE_COMMENT = "REMOVE_COMMENT";
 const EDIT_COMMENT = "EDIT_COMMENT";
-const GET_COMMENT = "GET_COMMENT";
+const DEL_COMMENT = "DEL_COMMENT";
 
-// action creators
-const addComment = createAction(ADD_COMMENT, (comment) => ({ comment }));
-const removeComment = createAction(REMOVE_COMMENT, (commentId) => ({
-  commentId,
-}));
-const editComment = createAction(EDIT_COMMENT, (commentId, comment) => ({
-  commentId,
-  comment,
-}));
-const getComment = createAction(GET_COMMENT, (commentList) => ({
-  commentList,
-}));
+//action create function
+const setComment = createAction(SET_COMMENT, (meetingId, comment_list) => ({ meetingId, comment_list }));
+const addComment = createAction(ADD_COMMENT, (meetingId, comment) => ({ meetingId, comment }));
+const editComment = createAction(EDIT_COMMENT, (meetingId, comment) => ({ meetingId, comment }));
+const delComment = createAction(DEL_COMMENT, (meetingId) => ({ meetingId }));
 
-//initialState
+// 초기값
 const initialState = {
-  commentList: [],
+  list: {},
 };
 
-//middleware
-const getCommentDB = (postId) => {
+// 미들웨어
+
+// const setCommentAction = (meetingId = null) => {
+//   return function (dispatch, getState, { history }) {
+//       if(!meetingId){
+//         return;
+//       }
+//       apis.getComment()
+//           .then((response) => 
+//           console.log(response),
+//           dispatch(response.data.commentResponseDtos)
+//           )
+//           .catch((error) => console.log(error))
+//   }
+// }
+
+const addCommentAction = (postId, comment) => {
+
   return function (dispatch, getState, { history }) {
-    apis
-      .getComment(postId)
-      .then((res) => {
-        dispatch(getComment(res.data));
+    apis.createComment(postId, comment)
+      .then((response) => {
+        console.log(response)
       })
-      .catch((e) => {
-        alert("댓글을 불러오는데 실패하였습니다.");
-      });
-  };
+      .catch((error) => {
+        console.log(error)
+      })
+  }
 };
 
-const addCommentDB = (comment) => {
+const delCommentAction = (meetingId, commentId) => {
   return function (dispatch, getState, { history }) {
-    apis
-      .addComment(comment)
-      .then((res) => {
-        dispatch(getCommentDB(comment.postId));
-      })
-      .catch((e) => { });
-  };
-};
+    apis.delCommentDB(meetingId, commentId)
+      .then((response) => {
+        console.log(response)
+        dispatch(delComment(meetingId, commentId))
 
-const editCommentDB = (commentId, data) => {
-  return function (dispatch, getState, { history }) {
-    apis
-      .put(`/api/comments/${commentId}`, data)
-      .then((res) => {
-        dispatch(editComment(commentId, res.data));
+        document.location.reload();
       })
-      .catch((e) => {
-        alert("댓글 수정에 실패하였습니다.");
-      });
-  };
-};
-
-const removeCommentDB = (commentId) => {
-  return function (dispatch, getState, { history }) {
-    apis
-      .removeComments(commentId)
-      .then((res) => {
-        dispatch(removeComment(commentId));
+      .catch((error) => {
+        console.log(error)
       })
-      .catch((e) => {
-        alert("댓글 삭제에 실패하였습니다.");
-      });
-  };
-};
+  }
+}
 
-//reducer
+
+// 리듀서
 export default handleActions(
   {
-    [ADD_COMMENT]: (state, action) =>
-      produce(state, (draft) => {
-        draft.commentList.unshift(action.payload.comment);
-      }),
-    [REMOVE_COMMENT]: (state, action) =>
-      produce(state, (draft) => {
-        draft.commentList = draft.commentList.filter(
-          (c) => c.commentId !== action.payload.commentId
-        );
-      }),
-    [GET_COMMENT]: (state, action) =>
-      produce(state, (draft) => {
-        draft.commentList = action.payload.commentList;
-      }),
+    [SET_COMMENT]: (state, action) => produce(state, (draft) => {
+      draft.list[action.payload.meetingId] = action.payload.comment_list;
+    }),
+    [ADD_COMMENT]: (state, action) => produce(state, (draft) => {
+      draft.list[action.payload.meetingId].unshift(action.payload.comment)
+    }),
+    // [EDIT_COMMENT]: (state, action) => produce(state, (draft)=> {
+    //   draft.list[action.payload.post_id].unshift(action.payload.comment)
+    // }),
+    [DEL_COMMENT]: (state, action) => produce(state, (draft) => {
+      draft.list[action.payload.meetingId].filter((p, i) => p.id !== action.payload.meetingId)
+    }),
   },
   initialState
 );
 
-//action creator export
 const actionCreators = {
+  setComment,
   addComment,
-  removeComment,
-  editComment,
-  getComment,
-  addCommentDB,
-  getCommentDB,
-  editCommentDB,
-  removeCommentDB,
+  // editComment,
+  // delComment,
+  // setCommentAction,
+  addCommentAction,
+  delCommentAction,
 };
 
 export { actionCreators };

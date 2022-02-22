@@ -55,7 +55,7 @@ const signupAction = (userEmail, password, passwordCheck, userName) => {
       .signup(userEmail, password, passwordCheck, userName)
       .then((res) => {
 
-        setCookie('userName', res.data.userName, 7);
+        setCookie('token', res.data.token, 7);
         localStorage.setItem("userName", res.data.userName);
         localStorage.setItem("userEmail", res.data.email);
         dispatch(setUser({ userEmail: userEmail, userName: userName }))

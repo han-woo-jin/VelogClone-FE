@@ -14,7 +14,7 @@ import { axapis } from '../shared/formaxios';
 import { apis, instance } from '../shared/axios';
 
 
-const PostWrite = ({ viewerRef }) => {
+const PostWrite = () => {
   const dispatch = useDispatch();
   const [ImgUrl, setImgUrl] = useState("");
   const [ImgId, setImgId] = useState("");
@@ -68,35 +68,6 @@ const PostWrite = ({ viewerRef }) => {
   }, [editorRef]);
 
 
-  // useEffect(() => {
-  //   if (contentRef.current) {
-  //     contentRef.current.getInstance().removeHook("addImageBlobHook");
-  //     contentRef.current
-  //       .getInstance()
-  //       .addHook("addImageBlobHook", (blob, post) => {
-  //         (async () => {
-  //           let formData = new FormData();
-  //           const post = {
-  //             title: "123123123123",
-  //             content: "asdfasdfasdf",
-  //           }
-  //           formData.append("imageFile", blob);
-  //           formData.append("post", new Blob([JSON.stringify(post)], { type: "application/json" }))
-
-  //           console.log(formData)
-  //           console.log()
-  //           await axapis.imgpost(formData)
-  //             .then((response) => {
-  //               console.log(response)
-  //             })
-  //             .catch((error) => console.log(error))
-  //         })();
-  //         return false;
-  //       });
-  //   }
-  //   return () => { };
-  // }, [contentRef]);
-
   const addPost = () => {
     // 마크다운 언어를 서버에 저장하기위해서 변형함
     const content = editorRef.current.getInstance().getMarkdown();
@@ -105,9 +76,9 @@ const PostWrite = ({ viewerRef }) => {
     apis.createPost(id, content, title)
       .then((res) => {
         console.log(res)
+        history.push('/');
       })
       .catch((error) => console.log(error, id, title, content))
-
   };
 
   const ThemeMode = useTheme();
@@ -129,12 +100,7 @@ const PostWrite = ({ viewerRef }) => {
             placeholder="당신의 이야기를 적어보세요"
             previewHighlight={false}
             theme={CurrentMode}
-            events={{
-              change: () => {
-                const data = editorRef.current.getInstance().getMarkdown();
-                viewerRef.current.getInstance().setMarkdown(data);
-              }
-            }}
+
           />
         </Body>
         <Footer theme={ThemeMode[0]}>

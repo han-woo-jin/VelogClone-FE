@@ -24,22 +24,34 @@ const PostDetail = (props) => {
   const pathRef = useRef();
   const viewerRef = useRef();
   const [detailList, setDetailList] = React.useState([]);
+  const [commentList, setCommentList] = React.useState([]);
+  const [comment, setComment] = React.useState();
+  const [commentId, setCommentId] = React.useState();
+  const [commentModifiedAt, setCommentModifiedAt] = React.useState();
+  const [commentUserName, setCommentUserName] = React.useState();
 
-  const id = props.match.params.postId
-  console.log(id)
   const loginUser = localStorage.getItem("userName")
+  const id = props.match.params.postId
 
   useEffect(() => {
     apis.getDetail(id)
       .then(function (response) {
         setDetailList(response.data)
+        setCommentList(response.data.commentList)
+        setComment(response.data.commentList[0].comment)
+        setCommentId(response.data.commentList[0].commentId)
+        setCommentModifiedAt(response.data.commentList[0].commentModifiedAt)
+        setCommentUserName(response.data.commentList[0].commentUserName)
       }).catch(function (error) {
         console.log(error)
       })
   }, [])
 
-  console.log(detailList.postUserName)
+  console.log(detailList.postId)
+  console.log(detailList)
+  const postId = detailList.postId
 
+  console.log(comment, commentId, commentModifiedAt, commentUserName)
 
   // 헤더 부분
   // const user = useSelector((state) => state.user.user);
@@ -91,7 +103,14 @@ const PostDetail = (props) => {
         </div>
         <Hr theme={ThemeMode[0]}></Hr>
       </Wrap>
-      <CommentWrite />
+      <CommentWrite
+        postId={postId}
+        commentList={commentList}
+        comment={comment}
+        commentId={commentId}
+        commentModifiedAt={commentModifiedAt}
+        commentUserName={commentUserName}
+      />
     </DetailLayout>
   );
 };
