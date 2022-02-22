@@ -13,9 +13,13 @@ import { AiFillCaretDown } from "react-icons/ai";
 const DetailHeader = (props) => {
   const dispatch = useDispatch();
   const user = document.cookie
+  const userEmail = localStorage.getItem("userEmail")
+  const userName = localStorage.getItem("userName")[0] + localStorage.getItem("userName")[1];
+
   // const user = true;
   const history = useHistory();
-
+  const id = useSelector((state) => state.user);
+  console.log(id)
   const [nav, setNav] = React.useState(false)
 
   const navBtn = () => {
@@ -49,7 +53,7 @@ const DetailHeader = (props) => {
         <StyledHeader>
           <RightMenu theme={ThemeMode[0]}>
             <Link to='/' >
-              nickname.log
+              velog
             </Link>
           </RightMenu>
           <LeftMenu>
@@ -61,7 +65,7 @@ const DetailHeader = (props) => {
             }} />
             <WriteBtn theme={ThemeMode[0]} onClick={() => { history.push('/postwrite') }}>새 글 작성</WriteBtn>
 
-            <WriteBtn theme={ThemeMode[0]} onClick={navBtn} >누구</WriteBtn>
+            <WriteBtn theme={ThemeMode[0]} onClick={navBtn} >{userName}</WriteBtn>
 
             <Nav nav={nav} />
             {modalOpen && <Modal modalClose={modalClose}></Modal>}
@@ -76,7 +80,7 @@ const DetailHeader = (props) => {
       <StyledHeader>
         <RightMenu theme={ThemeMode[0]}>
           <Link to='/' >
-            nickname.log
+            velog
           </Link>
         </RightMenu>
         <LeftMenu>
@@ -103,6 +107,7 @@ const StyledHeader = styled.div`
   align-items: center;
   justify-content: space-between;
   width: auto;
+  
   height: 64px;
   padding: 10px 110px 0px 110px;
   margin-left: auto;
@@ -136,6 +141,7 @@ const RightMenu = styled.li`
 const LeftMenu = styled.li`
   font-size: 16px;
   font-weight: 500;
+  min-width: 200px;
 `
 const WriteBtn = styled.button`
   border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};

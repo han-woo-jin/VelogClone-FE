@@ -18,13 +18,11 @@ function App() {
         <GlobalStyle />
         <Suspense fallback={<div>...loading</div>}>
           <Switch>
-
-            <Route exact path="/postdetail" component={PostDetail} />
             <Route exact path="/postwrite" component={PostWrite} />
             <Route exact path="/modal" component={Modal} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/" component={Main} />
-            <Route exact path="/postdetail/:postId" component={Sub} />
+            <Route exact path="/detail/:postId" component={PostDetail} />
           </Switch>
         </Suspense>
       </ThemeProvider>

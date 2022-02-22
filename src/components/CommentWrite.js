@@ -15,9 +15,9 @@ const CommentWrite = (props) => {
   const commentList = useSelector((state) => state.comment.commentList);
   const isLogIn = useSelector((state) => state.user.isLogIn);
 
-  useEffect(() => {
-    dispatch(commentAction.getCommentDB(postId));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(commentAction.getCommentDB(postId));
+  // }, []);
 
   const onChange = (e) => {
     setContent(e.target.value);
@@ -36,9 +36,9 @@ const CommentWrite = (props) => {
       window.alert("로그인 후 이용해 주세요.");
       history.push("/login");
     }
-    dispatch(commentAction.addCommentDB(comment));
-    dispatch(commentAction.getCommentDB(postId));
-    setContent("");
+    // dispatch(commentAction.addCommentDB(comment));
+    // dispatch(commentAction.getCommentDB(postId));
+    // setContent("");
   };
 
   return (

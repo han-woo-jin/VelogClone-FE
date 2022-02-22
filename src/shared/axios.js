@@ -40,6 +40,10 @@ export const apis = {
 
   // 게시물 불러오기
   getPost: () => instance.get("/api/posting"),
+
+  getDetail: (id) => instance.get(`/api/posting/${id}`),
+  delPost: (id) => instance.delete(`/api/posting/${id}`),
+
   // 게시물 한개불러오기
   // getOnePost: (meetingId) => instance.get(`/api/meeting/${meetingId}`),
   // 게시물 작성하기
@@ -52,7 +56,6 @@ export const apis = {
   // 게시물 수정하기
   edPost: (meetingId) => instance.patch(`/api/meeting/${meetingId}`),
   // 게시물 삭제하기
-  delPost: (meetingId) => instance.delete(`/api/meeting/${meetingId}`),
 
 
   // 댓글 불러오기

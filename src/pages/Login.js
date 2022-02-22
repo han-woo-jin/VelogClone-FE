@@ -33,7 +33,6 @@ const Login = () => {
     }
     dispatch(userActions.loginAction(userEmail, password));
 
-    history.push('/')
   };
   return (
 

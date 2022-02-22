@@ -14,7 +14,7 @@ import { axapis } from '../shared/formaxios';
 import { apis, instance } from '../shared/axios';
 
 
-const PostWrite = () => {
+const PostWrite = ({ viewerRef }) => {
   const dispatch = useDispatch();
   const [ImgUrl, setImgUrl] = useState("");
   const [ImgId, setImgId] = useState("");
@@ -129,6 +129,12 @@ const PostWrite = () => {
             placeholder="당신의 이야기를 적어보세요"
             previewHighlight={false}
             theme={CurrentMode}
+            events={{
+              change: () => {
+                const data = editorRef.current.getInstance().getMarkdown();
+                viewerRef.current.getInstance().setMarkdown(data);
+              }
+            }}
           />
         </Body>
         <Footer theme={ThemeMode[0]}>

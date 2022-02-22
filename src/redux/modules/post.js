@@ -56,6 +56,25 @@ const getPostAction = (postId, post) => {
   };
 }
 
+const getDetailAction = (postId, post) => {
+  return function (dispatch, getState, { history }) {
+    apis.getPost()
+      .then((res) => {
+        const postList = res.data;
+        if (postId) {
+          const post = postList.filter((post) => postId === postId[0]);
+          const title = postList.title;
+          const content = postList.content;
+          const image = postList.imageUrl;
+          dispatch(getPost(post, title, content, image));
+        } else {
+          dispatch(getPost(postList));
+        }
+      })
+      .catch((err) => { });
+  };
+}
+
 
 const addPostAction = (ImgId) => {
   return function (dispatch, getState, { history }) {
@@ -81,12 +100,12 @@ const editPostAction = (id, formData) => {
   }
 }
 
-const delPostAction = (meetingId) => {
+const delPostAction = (id) => {
   return function (dispatch, getState, { history }) {
-    apis.delPost(meetingId)
+    apis.delPost(id)
       .then((res) => {
         console.log(res)
-        dispatch(delPost(meetingId))
+        dispatch(delPost(id))
         document.location.reload();
       })
       .catch((err) => console.log(err))

@@ -1,38 +1,12 @@
+
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from 'react-router-dom';
 import styled from "styled-components";
 import { useTheme } from '../context/themeProvider';
-// import profile from "../assets/profile.png";
-
-import post, { actionCreators as postActions } from "../redux/modules/post";
-
+import ReactMarkdown from 'react-markdown';
 const Card = (props) => {
-  // React.useEffect(() => {
-  //   dispatch(postActions.getPostAction());
-  // }, []);
   const ThemeMode = useTheme();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  // const postList = useSelector((state) => state.post.list);
 
-  // console.log(postList.content)
-  // // // 게시물추가 할때 올렸던 이미지 카드에 추가
-  // const image = postList[props.index].image;
-
-  // // 게시물 작성 날짜
-  // const modDate = postList[props.index].regDate.split("T")[0].split("-", 3);
-  // const year = modDate[0];
-  // const month = modDate[1];
-  // const day = modDate[2];
-  // const postdate = year + "년 " + month + "월 " + day + "일";
-
-  // // 카드에 마크다운 언어 없애기 위해서
-  // const postId = props.post.postId;
-  // const content = postList[props.index].content.split("![")[0];
-  // const hashContent = content.replaceAll("#", "");
-  // const starContent = hashContent.replaceAll("*", "");
-
+  console.warn = console.error = () => { };
   const apple = props.content.split("!")[0];
   const orange = props.content.split(")")[1];
 
@@ -41,14 +15,15 @@ const Card = (props) => {
     <>
       <CardWrap
         theme={ThemeMode[0]}
-        onClick={() => {
-          history.push(`/postdetail/${props.postId}`);
-        }}
       >
         <CardImg src={props.imageUrl} />
         <Body>
           <Title>{props.title}</Title>
-          <Description>{apple === "" ? orange : apple}</Description>
+          <Description>
+            <ReactMarkdown>
+              {apple === "" ? orange : apple}
+            </ReactMarkdown>
+          </Description>
           <DtCmt>
             <span>
               <span>{props.postModifiedAt}</span>
@@ -70,7 +45,6 @@ const Card = (props) => {
     </>
   );
 };
-
 const DtCmt = styled.div`
   font-size: 0.75rem;
   color: gray;
@@ -147,11 +121,6 @@ const Description = styled.p`
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 `;
-const Date = styled.div`
-  height: 8px;
-  font-size: 12px;
-  color: #868e96;
-`;
 const Footer = styled.div`
   padding: 10px 16px;
   height: 44.1px;
@@ -167,13 +136,6 @@ const FooterLeft = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-`;
-const Profile = styled.img`
-  width: 23.99px;
-  height: 23.99px;
-  margin: 0 8px 0 0;
-  background-size: cover;
-  border-radius: 50%;
 `;
 const Span = styled.span`
   color: rgb(134, 142, 150);

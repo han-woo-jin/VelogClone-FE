@@ -11,6 +11,8 @@ import Nav from './Nav';
 import { AiFillCaretDown } from "react-icons/ai";
 
 const Header = (props) => {
+  const userName = localStorage.getItem("userName")[0] + localStorage.getItem("userName")[1];
+
   const dispatch = useDispatch();
   const user = document.cookie
   // const user = true;
@@ -61,9 +63,10 @@ const Header = (props) => {
             }} />
             <WriteBtn theme={ThemeMode[0]} onClick={() => { history.push('/postwrite') }}>새 글 작성</WriteBtn>
 
-            <WriteBtn theme={ThemeMode[0]} onClick={navBtn} >누구</WriteBtn>
-
+            <WriteBtn theme={ThemeMode[0]} onClick={navBtn} >{userName}</WriteBtn>
+            <AiFillCaretDown onClick={navBtn} />
             <Nav nav={nav} />
+
             {modalOpen && <Modal modalClose={modalClose}></Modal>}
           </LeftMenu>
         </StyledHeader>
@@ -136,6 +139,7 @@ const RightMenu = styled.li`
 const LeftMenu = styled.li`
   font-size: 16px;
   font-weight: 500;
+  min-width: 200px;
 `
 const WriteBtn = styled.button`
   border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};

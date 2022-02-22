@@ -34,9 +34,12 @@ const loginAction = (userEmail, password) => {
       .login(userEmail, password)
       .then((res) => {
         setCookie('token', res.data.token, 7);
+        localStorage.setItem("userName", res.data.userName);
+        localStorage.setItem("userEmail", res.data.email);
         dispatch(setUser({ userEmail: userEmail, }));
 
         document.location.reload();
+
         console.log(res, "로그인 성공")
       })
       .catch((error) => {
@@ -52,7 +55,9 @@ const signupAction = (userEmail, password, passwordCheck, userName) => {
       .signup(userEmail, password, passwordCheck, userName)
       .then((res) => {
 
-        setCookie('token', res.data.token, 7);
+        setCookie('userName', res.data.userName, 7);
+        localStorage.setItem("userName", res.data.userName);
+        localStorage.setItem("userEmail", res.data.email);
         dispatch(setUser({ userEmail: userEmail, userName: userName }))
         document.location.reload();
         history.replace("/");
@@ -62,7 +67,6 @@ const signupAction = (userEmail, password, passwordCheck, userName) => {
       .catch((error) => console.log(error));
   };
 };
-
 const logoutAction = () => {
   return function (dispatch, getState, { history }) {
     deleteCookie("token");

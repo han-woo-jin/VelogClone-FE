@@ -5,6 +5,7 @@ import Card from "../components/Card";
 import { actionCreators as postActions } from "../redux/modules/post";
 import Header from "../components/Header";
 import { apis } from "../shared/axios";
+import { useHistory } from 'react-router-dom';
 
 // React Icons
 import { ImClock } from "react-icons/im";
@@ -12,14 +13,16 @@ import { BsGraphUp } from "react-icons/bs";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { useTheme } from '../context/themeProvider';
 
-const PostList = () => {
+const PostList = (props) => {
   const dispatch = useDispatch();
   // const postList = useSelector((state) => state.post.list);
-
+  const history = useHistory();
   const ThemeMode = useTheme();
   // React.useEffect(() => {
   //   dispatch(postActions.getPostMD());
   // }, []);
+  const tokencheck = document.cookie;
+  const token = tokencheck.split("=")[1];
 
   const [post_list, setPostList] = useState([]);
 
@@ -33,7 +36,7 @@ const PostList = () => {
   }, [])
 
   return (
-    <>
+    <React.Fragment>
       <Wrapper theme={ThemeMode[0]}>
         {/* 상단에 있는 트렌딩, 최신 버튼 */}
         <Button
@@ -103,11 +106,25 @@ const PostList = () => {
       >
         <Grid>
           {post_list.map((post, index) => {
-            return <Card key={index} {...post} />
+
+            return (
+              <Grid key={index} onClick={() => {
+                if (token) {
+                  history.push(`/detail/${post.postId}`)
+                } else {
+                  window.alert('로그인 먼저 해주세요!')
+                  history.push('/login')
+                }
+              }}>
+
+                <Card key={index} {...post} />
+              </Grid>
+            )
+
           })}
         </Grid>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 
