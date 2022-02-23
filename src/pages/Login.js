@@ -1,20 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import logo from '../assets/logo.png';
-import AppLayout from '../components/AppLayout';
 import { useTheme } from '../context/themeProvider';
 import Input from '../elements/Input';
-import { FlexContainer } from '../style/styles';
 import Text from '../elements/Text';
 import { actionCreators as userActions } from '../redux/modules/user';
 import { emailCheck } from '../shared/common';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 
 const Login = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
   const ThemeMode = useTheme();
 

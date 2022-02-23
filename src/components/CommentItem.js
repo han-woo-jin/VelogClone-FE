@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { actionCreators as commentActions } from "../redux/modules/comment";
@@ -10,9 +9,6 @@ const CommentItem = (props) => {
   const dispatch = useDispatch();
 
   const loginUser = localStorage.getItem("userName")
-  const commentList = props.commentList;
-
-  const id = props.postId
   const comment = props.comment
   const commentId = props.commentId
   const commentModifiedAt = props.commentModifiedAt

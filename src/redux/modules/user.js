@@ -1,9 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import { setCookie, getCookie, deleteCookie } from "../../shared/cookie";
-import axios from 'axios';
+import { setCookie, deleteCookie } from "../../shared/cookie";
 import { apis } from '../../shared/axios';
-import { useHistory } from 'react-router-dom';
 
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";

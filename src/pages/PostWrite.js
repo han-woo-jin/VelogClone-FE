@@ -1,31 +1,22 @@
 import { React, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { actionCreators as postActions } from "../redux/modules/post";
 import { history } from "../redux/configStore";
 import { useTheme } from '../context/themeProvider';
 import { useEffect } from 'react';
 // 마크다운 라이브러리 토스트 ui 사용
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-import axios from 'axios';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import { axapis } from '../shared/formaxios';
-import { apis, instance } from '../shared/axios';
+import { apis, } from '../shared/axios';
 
 
 const PostWrite = (props) => {
-  const dispatch = useDispatch();
   const [ImgUrl, setImgUrl] = useState("");
   const [ImgId, setImgId] = useState("");
-  const ImageList = [];
-  const [ImageIdList, setImageIdList] = useState(
-    {
-    },
-  );
   const [title, setTitle] = useState("");
   const editorRef = useRef();
-  const contentRef = useRef();
+
 
   const titleChange = (e) => {
     setTitle(e.target.value);
@@ -39,19 +30,14 @@ const PostWrite = (props) => {
     if (is_edit) {
       apis.getDetail(id)
         .then(function (response) {
-
-
           editorRef.current.getInstance().setMarkdown(response.data.content);
           setTitle(response.data.title)
-
-
         }).catch(function (error) {
           console.log(error)
         })
     }
   }, []);
 
-  const token = document.cookie.split("=")[1];
 
   useEffect(() => {
     if (editorRef.current) {
@@ -72,12 +58,6 @@ const PostWrite = (props) => {
                 const imageUrl = res.data.imageUrl;
                 setImgUrl(res.data.imageUrl)
                 setImgId(res.data.imageId)
-                ImageList.push(...ImageList,
-                  { ImageIdList: res.data.imageId })
-                setImageIdList({
-                  ...ImageIdList,
-                  ImageIdList: res.data.imageId
-                })
                 callback(imageUrl, "image");
               })
               .catch((error) => console.log(error));
@@ -89,21 +69,18 @@ const PostWrite = (props) => {
     return () => { };
   }, [editorRef]);
 
-
-  console.log(ImageIdList)
-  console.log(ImageList)
-
   const addPost = () => {
     // 마크다운 언어를 서버에 저장하기위해서 변형함
     const content = editorRef.current.getInstance().getMarkdown();
     const id = ImgId
-    console.log(id, title, content, ImageIdList)
-    apis.createPost(id, content, title, ImageIdList)
+    console.log(id, title, content)
+
+    apis.createPost(id, content, title)
       .then((res) => {
         console.log(res)
         history.push('/');
       })
-      .catch((error) => console.log(error, id, title, content, ImageIdList))
+      .catch((error) => console.log(error, id, title, content))
   };
 
   const editPost = () => {
@@ -112,7 +89,7 @@ const PostWrite = (props) => {
     const id = props.match.params.postId
     console.log(id, title, content)
 
-    apis.editPost(id, content, title, ImageIdList)
+    apis.editPost(id, content, title)
       .then((res) => {
         console.log(res)
         history.push('/');
@@ -148,8 +125,6 @@ const PostWrite = (props) => {
             placeholder="당신의 이야기를 적어보세요"
             previewHighlight={false}
             theme={CurrentMode}
-
-
           />
         </Body>
         <Footer theme={ThemeMode[0]}>
@@ -286,22 +261,4 @@ const SubmitBtn = styled.button`
   }
 `;
 
-const Button = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  background: rgb(18, 184, 134);
-  color: white;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-family: inherit;
-  box-sizing: inherit;
-  outline: none;
-  &:hover {
-    background-color: #45d1a7;
-  }
-`;
 export default PostWrite;

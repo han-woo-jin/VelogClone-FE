@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Card from "../components/Card";
-import { actionCreators as postActions } from "../redux/modules/post";
-import Header from "../components/Header";
 import { apis } from "../shared/axios";
 import { useHistory } from 'react-router-dom';
 
@@ -14,7 +11,6 @@ import { BiDotsVerticalRounded } from "react-icons/bi";
 import { useTheme } from '../context/themeProvider';
 
 const PostList = (props) => {
-  const dispatch = useDispatch();
   // const postList = useSelector((state) => state.post.list);
   const history = useHistory();
   const ThemeMode = useTheme();

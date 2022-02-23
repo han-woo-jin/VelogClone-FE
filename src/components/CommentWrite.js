@@ -11,6 +11,7 @@ const CommentWrite = (props) => {
   const dispatch = useDispatch();
 
   const ThemeMode = useTheme();
+
   const [comments, setComments] = React.useState("");
   // const commentList = useSelector((state) => state.comment.commentList);
   const isLogIn = useSelector((state) => state.user.isLogIn);
@@ -25,7 +26,7 @@ const CommentWrite = (props) => {
   const commentModifiedAt = props.commentModifiedAt
   const commentUserName = props.commentUserName
   const commentList = props.commentList
-  console.log(postId)
+
 
   const onChange = (e) => {
     setComments(e.target.value);
@@ -47,7 +48,7 @@ const CommentWrite = (props) => {
 
   return (
     <React.Fragment>
-      {/* <Count>{commentList?.length}개의 댓글</Count> */}
+      <Count>{commentList?.length}개의 댓글</Count>
       <Container>
         <Input
           theme={ThemeMode[0]}

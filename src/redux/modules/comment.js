@@ -1,20 +1,18 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import "moment";
-import { instance } from "../../shared/axios";
 import { apis } from "../../shared/axios";
-import { axapis } from "../../shared/axios";
 
 //action
 const SET_COMMENT = "SET_COMMENT";
 const ADD_COMMENT = "ADD_COMMENT";
-const EDIT_COMMENT = "EDIT_COMMENT";
+// const EDIT_COMMENT = "EDIT_COMMENT";
 const DEL_COMMENT = "DEL_COMMENT";
 
 //action create function
 const setComment = createAction(SET_COMMENT, (meetingId, comment_list) => ({ meetingId, comment_list }));
 const addComment = createAction(ADD_COMMENT, (meetingId, comment) => ({ meetingId, comment }));
-const editComment = createAction(EDIT_COMMENT, (meetingId, comment) => ({ meetingId, comment }));
+// const editComment = createAction(EDIT_COMMENT, (meetingId, comment) => ({ meetingId, comment }));
 const delComment = createAction(DEL_COMMENT, (meetingId) => ({ meetingId }));
 
 // 초기값

@@ -1,19 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import logo from '../assets/logo.png';
-import AppLayout from '../components/AppLayout';
 import { useTheme } from '../context/themeProvider';
 import Input from '../elements/Input';
-import { FlexContainer } from '../style/styles';
 import Text from '../elements/Text';
 import { emailCheck } from '../shared/common';
 import { actionCreators as userActions } from "../redux/modules/user";
 import { useDispatch } from "react-redux";
-import { useHistory } from 'react-router-dom';
 
 const Signup = (props) => {
-  const history = useHistory();
   const ThemeMode = useTheme();
   const [userEmail, setEmail] = React.useState("");
   const [password, setPw] = React.useState("");
@@ -134,25 +128,3 @@ const Btn = styled.button`
   border: none;
 
 `;
-
-const LeftMenu = styled.li`
-  font-size: 16px;
-  font-weight: 500;
-`
-const WriteBtn = styled.button`
-  border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
-  color:  ${props => props.theme === 'light' ? 'black' : 'white'};
-  cursor: pointer;
-  border-radius: 25px;
-  margin: 15px 10px 15px 0px;
-  font-size: 14px;
-  font-size: 17px;
-  padding: 10px 15px;
-  font-weight: bold;
-  border-radius: 25px;
-  &:hover {
-    background-color: ${props => props.theme === 'light' ? 'black' : 'white'};;
-    color:${props => props.theme === 'light' ? 'white' : 'black'};;
-    transition: 0.125s;
-  }
-`

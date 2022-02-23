@@ -1,6 +1,5 @@
 import axios from "axios";
 
-const tokencheck = document.cookie;
 const token = document.cookie.split("=")[1];
 
 export const instance = axios.create({

@@ -1,10 +1,8 @@
 import { createAction, handleActions } from "redux-actions"
 import { produce } from 'immer'
-import { apis, instance } from "../../shared/axios"
-import axios from "axios"
+import { apis } from "../../shared/axios"
 import { axapis } from "../../shared/formaxios"
 
-const token = document.cookie
 
 //Action
 const SET_POST = "SET_POST"
@@ -56,24 +54,24 @@ const getPostAction = (postId, post) => {
   };
 }
 
-const getDetailAction = (postId, post) => {
-  return function (dispatch, getState, { history }) {
-    apis.getPost()
-      .then((res) => {
-        const postList = res.data;
-        if (postId) {
-          const post = postList.filter((post) => postId === postId[0]);
-          const title = postList.title;
-          const content = postList.content;
-          const image = postList.imageUrl;
-          dispatch(getPost(post, title, content, image));
-        } else {
-          dispatch(getPost(postList));
-        }
-      })
-      .catch((err) => { });
-  };
-}
+// const getDetailAction = (postId, post) => {
+//   return function (dispatch, getState, { history }) {
+//     apis.getPost()
+//       .then((res) => {
+//         const postList = res.data;
+//         if (postId) {
+//           const post = postList.filter((post) => postId === postId[0]);
+//           const title = postList.title;
+//           const content = postList.content;
+//           const image = postList.imageUrl;
+//           dispatch(getPost(post, title, content, image));
+//         } else {
+//           dispatch(getPost(postList));
+//         }
+//       })
+//       .catch((err) => { });
+//   };
+// }
 
 
 const addPostAction = (ImgId) => {

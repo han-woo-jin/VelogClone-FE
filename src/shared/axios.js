@@ -46,10 +46,9 @@ export const apis = {
   // 게시물 한개불러오기
   // getOnePost: (meetingId) => instance.get(`/api/meeting/${meetingId}`),
   // 게시물 작성하기
-  createPost: (ImgId, content, title, ImageIdList) => instance.post(`/api/posting/${ImgId}`, {
+  createPost: (ImgId, content, title) => instance.post(`/api/posting/${ImgId}`, {
     content: content,
     title: title,
-    ImageIdList: ImageIdList,
   },
     { withCredentials: true }
   ),
