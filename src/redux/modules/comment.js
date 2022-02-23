@@ -51,14 +51,12 @@ const addCommentAction = (postId, comment) => {
   }
 };
 
-const delCommentAction = (meetingId, commentId) => {
+const delCommentAction = (commentId) => {
   return function (dispatch, getState, { history }) {
-    apis.delCommentDB(meetingId, commentId)
+    apis.delCommentDB(commentId)
       .then((response) => {
         console.log(response)
-        dispatch(delComment(meetingId, commentId))
-
-        document.location.reload();
+        dispatch(delComment(commentId))
       })
       .catch((error) => {
         console.log(error)

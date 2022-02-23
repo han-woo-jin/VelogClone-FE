@@ -5,7 +5,7 @@ const token = tokencheck.split("=")[1];
 
 export const instance = axios.create({
   // 기본적으로 우리가 바라볼 서버의 주소
-  baseURL: "http://15.164.211.199/",
+  baseURL: "http://13.124.244.126/",
   headers: {
     // "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
     // accept: "*/*",
@@ -40,21 +40,27 @@ export const apis = {
 
   // 게시물 불러오기
   getPost: () => instance.get("/api/posting"),
-
   getDetail: (id) => instance.get(`/api/posting/${id}`),
   delPost: (id) => instance.delete(`/api/posting/${id}`),
 
   // 게시물 한개불러오기
   // getOnePost: (meetingId) => instance.get(`/api/meeting/${meetingId}`),
   // 게시물 작성하기
-  createPost: (ImgId, content, title) => instance.post(`/api/posting/${ImgId}`, {
+  createPost: (ImgId, content, title, ImageIdList) => instance.post(`/api/posting/${ImgId}`, {
+    content: content,
+    title: title,
+    ImageIdList: ImageIdList,
+  },
+    { withCredentials: true }
+  ),
+
+  // 게시물 수정하기
+  editPost: (postId, content, title) => instance.put(`/api/posting/${postId}`, {
     content: content,
     title: title,
   },
     { withCredentials: true }
   ),
-  // 게시물 수정하기
-  edPost: (meetingId) => instance.patch(`/api/meeting/${meetingId}`),
   // 게시물 삭제하기
 
 
@@ -68,7 +74,7 @@ export const apis = {
   // 댓글 수정하기
   // editComment: (meetingId, content, commentId) => instance.put(`api/meeting/${meetingId}/comments/${commentId}`, content),
   // 댓글 삭제하기
-  delCommentDB: (meetingId, commentId) => instance.delete(`api/meeting/${meetingId}/comments/${commentId}`),
+  delCommentDB: (commentId) => instance.delete(`api/comment/${commentId}`),
 
 
   //모임 참여하기

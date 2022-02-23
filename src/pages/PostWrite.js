@@ -14,26 +14,43 @@ import { axapis } from '../shared/formaxios';
 import { apis, instance } from '../shared/axios';
 
 
-const PostWrite = () => {
+const PostWrite = (props) => {
   const dispatch = useDispatch();
   const [ImgUrl, setImgUrl] = useState("");
   const [ImgId, setImgId] = useState("");
-
-  const editorRef = useRef();
+  const ImageList = [];
+  const [ImageIdList, setImageIdList] = useState(
+    {
+    },
+  );
   const [title, setTitle] = useState("");
+  const editorRef = useRef();
+  const contentRef = useRef();
 
   const titleChange = (e) => {
     setTitle(e.target.value);
   };
 
+  const id = props.match.params.postId;
+  const is_edit = id ? true : false
+
+  useEffect(() => {
+
+    if (is_edit) {
+      apis.getDetail(id)
+        .then(function (response) {
 
 
+          editorRef.current.getInstance().setMarkdown(response.data.content);
+          setTitle(response.data.title)
 
-  const handleClick = () => {
-    const content = editorRef.current.getInstance().getMarkdown();
 
-    console.log(content, title);
-  };
+        }).catch(function (error) {
+          console.log(error)
+        })
+    }
+  }, []);
+
   const token = document.cookie.split("=")[1];
 
   useEffect(() => {
@@ -55,6 +72,12 @@ const PostWrite = () => {
                 const imageUrl = res.data.imageUrl;
                 setImgUrl(res.data.imageUrl)
                 setImgId(res.data.imageId)
+                ImageList.push(...ImageList,
+                  { ImageIdList: res.data.imageId })
+                setImageIdList({
+                  ...ImageIdList,
+                  ImageIdList: res.data.imageId
+                })
                 callback(imageUrl, "image");
               })
               .catch((error) => console.log(error));
@@ -63,17 +86,33 @@ const PostWrite = () => {
           return false;
         });
     }
-
     return () => { };
   }, [editorRef]);
 
+
+  console.log(ImageIdList)
+  console.log(ImageList)
 
   const addPost = () => {
     // 마크다운 언어를 서버에 저장하기위해서 변형함
     const content = editorRef.current.getInstance().getMarkdown();
     const id = ImgId
+    console.log(id, title, content, ImageIdList)
+    apis.createPost(id, content, title, ImageIdList)
+      .then((res) => {
+        console.log(res)
+        history.push('/');
+      })
+      .catch((error) => console.log(error, id, title, content, ImageIdList))
+  };
+
+  const editPost = () => {
+    // 마크다운 언어를 서버에 저장하기위해서 변형함
+    const content = editorRef.current.getInstance().getMarkdown();
+    const id = props.match.params.postId
     console.log(id, title, content)
-    apis.createPost(id, content, title)
+
+    apis.editPost(id, content, title, ImageIdList)
       .then((res) => {
         console.log(res)
         history.push('/');
@@ -83,23 +122,33 @@ const PostWrite = () => {
 
   const ThemeMode = useTheme();
   const CurrentMode = ThemeMode[0] === 'light' ? 'null' : 'dark';
+
   return (
     <>
       <Wrap>
         <Head theme={ThemeMode[0]}>
-          <TitleInput theme={ThemeMode[0]} placeholder="제목을 입력하세요" onChange={titleChange} />
+          <TitleInput value={title} theme={ThemeMode[0]} placeholder="제목을 입력하세요" onChange={titleChange} />
         </Head>
         <Body>
           <Editor
+            events={{
+              change: () => {
+                const data = editorRef.current.getInstance().getMarkdown();
+                editorRef.current.getInstance().setMarkdown(data);
+              },
+            }}
+            editorRef={editorRef}
             ref={editorRef}
             previewStyle="vertical"
             width="100%"
-            height="100vh"
+            height="50vh"
+            usageStatistics={false}
             initialEditType="markdown"
             useCommandShortcut={true}
             placeholder="당신의 이야기를 적어보세요"
             previewHighlight={false}
             theme={CurrentMode}
+
 
           />
         </Body>
@@ -115,7 +164,11 @@ const PostWrite = () => {
             <SaveBtn onClick={() => window.alert("힝 속았지~ 😎")}>
               임시저장
             </SaveBtn>
-            <SubmitBtn onClick={addPost}>출간하기</SubmitBtn>
+            {is_edit === true
+              ? <SubmitBtn onClick={editPost}>수정하기</SubmitBtn>
+              : <SubmitBtn onClick={addPost}>출간하기</SubmitBtn>
+            }
+
           </div>
 
         </Footer>

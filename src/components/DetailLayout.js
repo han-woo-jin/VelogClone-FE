@@ -6,12 +6,14 @@ import ThemeToggle from '../theme/ThemeToggle';
 import DetailHeader from './DetailHeader';
 import PostList from '../pages/PostList';
 
-const AppLayout = ({ children }) => {
+const DetailLayout = ({ children }) => {
+
   const [ThemeMode, toggleTheme] = useTheme();
+
+
   return (
     <WrapContainer>
       <DetailHeader />
-
 
       <ThemeToggle toggle={toggleTheme} mode={ThemeMode}>
         DarkMode
@@ -21,7 +23,26 @@ const AppLayout = ({ children }) => {
   )
 }
 
-export default AppLayout;
+// const DetailLayout = (props) => {
+
+//   const [ThemeMode, toggleTheme] = useTheme();
+//   // const Email = props.postUserEmail;
+//   const { children, postUserEmail } = props;
+//   return (
+//     <WrapContainer>
+//       <DetailHeader />
+
+//       <ThemeToggle toggle={toggleTheme} mode={ThemeMode}>
+//         DarkMode
+//       </ThemeToggle>
+//       <FlexContainer>{React.cloneElement(children, { postUserEmail })}</FlexContainer>
+//     </WrapContainer>
+//   )
+// }
+
+
+
+export default DetailLayout;
 
 const WrapContainer = styled.main`
   min-height: 100%;

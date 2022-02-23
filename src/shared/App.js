@@ -19,6 +19,7 @@ function App() {
         <Suspense fallback={<div>...loading</div>}>
           <Switch>
             <Route exact path="/postwrite" component={PostWrite} />
+            <Route path="/postwrite/:postId" component={PostWrite} />
             <Route exact path="/modal" component={Modal} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/" component={Main} />

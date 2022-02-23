@@ -63,7 +63,7 @@ const Header = (props) => {
             }} />
             <WriteBtn theme={ThemeMode[0]} onClick={() => { history.push('/postwrite') }}>새 글 작성</WriteBtn>
 
-            <WriteBtn theme={ThemeMode[0]} onClick={navBtn} >{userName}</WriteBtn>
+            <UserBtn theme={ThemeMode[0]} onClick={navBtn} >{userName}</UserBtn>
             <AiFillCaretDown onClick={navBtn} />
             <Nav nav={nav} />
 
@@ -152,6 +152,24 @@ const WriteBtn = styled.button`
   padding: 10px 10px;
   font-weight: bold;
   border-radius: 25px;
+  &:hover {
+    background-color: ${props => props.theme === 'light' ? 'black' : 'white'};
+    color:${props => props.theme === 'light' ? 'white' : 'black'};;
+    transition: 0.125s;
+  }
+`
+const UserBtn = styled.button`
+  border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
+  color:  ${props => props.theme === 'light' ? 'black' : 'white'};
+  
+  cursor: pointer;
+  width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+  font-size: 16px;
+  padding: 10px 10px;
+  font-weight: bold;
   &:hover {
     background-color: ${props => props.theme === 'light' ? 'black' : 'white'};
     color:${props => props.theme === 'light' ? 'white' : 'black'};;

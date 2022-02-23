@@ -25,7 +25,7 @@ const CommentWrite = (props) => {
   const commentModifiedAt = props.commentModifiedAt
   const commentUserName = props.commentUserName
   const commentList = props.commentList
-
+  console.log(postId)
 
   const onChange = (e) => {
     setComments(e.target.value);

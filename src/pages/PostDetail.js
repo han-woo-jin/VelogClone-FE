@@ -5,12 +5,13 @@ import CommentWrite from "../components/CommentWrite";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { history } from "../redux/configStore";
 // 마크다운 뷰어 토스트ui 라이브러리 사용
+import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import ReactMarkdown from 'react-markdown';
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Viewer } from "@toast-ui/react-editor";
 import DetailLayout from '../components/DetailLayout'
 // React Icons
-
+import { Link } from 'react-router-dom';
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import { useTheme } from '../context/themeProvider';
@@ -24,12 +25,14 @@ const PostDetail = (props) => {
   const pathRef = useRef();
   const viewerRef = useRef();
   const [detailList, setDetailList] = React.useState([]);
+  const [cont, setCont] = React.useState([]);
+
   const [commentList, setCommentList] = React.useState([]);
   const [comment, setComment] = React.useState();
   const [commentId, setCommentId] = React.useState();
   const [commentModifiedAt, setCommentModifiedAt] = React.useState();
   const [commentUserName, setCommentUserName] = React.useState();
-
+  const [postUserEmail, setUserEmail] = React.useState();
   const loginUser = localStorage.getItem("userName")
   const id = props.match.params.postId
 
@@ -37,29 +40,31 @@ const PostDetail = (props) => {
     apis.getDetail(id)
       .then(function (response) {
         setDetailList(response.data)
+        viewerRef.current.getInstance().setMarkdown(response.data.content);
+        console.log(viewerRef)
+        setUserEmail(response.data.postUserEmail.split("@")[0])
         setCommentList(response.data.commentList)
         setComment(response.data.commentList[0].comment)
         setCommentId(response.data.commentList[0].commentId)
         setCommentModifiedAt(response.data.commentList[0].commentModifiedAt)
         setCommentUserName(response.data.commentList[0].commentUserName)
+        viewerRef.current.getInstance().setMarkdown(response.data.content);
+        console.log(viewerRef)
       }).catch(function (error) {
         console.log(error)
       })
   }, [])
 
-  console.log(detailList.postId)
-  console.log(detailList)
   const postId = detailList.postId
-
-  console.log(comment, commentId, commentModifiedAt, commentUserName)
-
+  console.log(postUserEmail)
+  const userIcon = detailList.postUserName
   // 헤더 부분
   // const user = useSelector((state) => state.user.user);
   const user = document.cookie;
 
   const content = detailList.content;
-  console.log(content)
 
+  console.log(viewerRef)
   const deletePost = () => {
     const ok = window.confirm("정말로 삭제하시겠어요?")
 
@@ -71,8 +76,9 @@ const PostDetail = (props) => {
     }
   }
 
+  const CurrentMode = ThemeMode[0] === 'light' ? 'null' : 'dark';
   return (
-    <DetailLayout>
+    <DetailLayout detailList={detailList} postUserEmail={postUserEmail}>
       <Wrap>
         <h1>{detailList.title}</h1>
         <Info>
@@ -83,7 +89,9 @@ const PostDetail = (props) => {
           </div>
           {detailList.postUserName === loginUser ? (
             <div>
-              <button>수정</button>
+              <button onClick={() => {
+                history.push(`/postwrite/${postId}`)
+              }}>수정</button>
               <button onClick={deletePost}>삭제</button>
             </div>
           ) : null}
@@ -92,16 +100,16 @@ const PostDetail = (props) => {
         <div>
 
 
-          <div>
-            <ReactMarkdown>{content}</ReactMarkdown>
-            <Viewer initialValue={content} />
-          </div>
+          <Body theme={ThemeMode[0]}>
+            {/* <ReactMarkdown>{content}</ReactMarkdown> */}
+            <Viewer ref={viewerRef} theme={CurrentMode} />
+          </Body>
           <Writer>
-            <Image src={"/img/profile.png"} />
+            <User theme={ThemeMode[0]}><button>{userIcon}</button></User>
             <div>{detailList.postUserName}</div>
           </Writer>
         </div>
-        <Hr theme={ThemeMode[0]}></Hr>
+        <Hr theme={ThemeMode[0]} ></Hr>
       </Wrap>
       <CommentWrite
         postId={postId}
@@ -111,9 +119,30 @@ const PostDetail = (props) => {
         commentModifiedAt={commentModifiedAt}
         commentUserName={commentUserName}
       />
-    </DetailLayout>
+    </DetailLayout >
   );
 };
+
+
+
+
+const RightMenu = styled.li`
+  & a {
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+    color:  ${props => props.theme === 'light' ? 'black' : 'white'};
+    font-weight: bold;
+    & img {
+      width: 30px;
+    }
+    & p {
+      margin-left: 2px;
+      font-size: 25px;
+      font-weight: 500;
+    }
+  }
+`
 
 const Like = styled.div`
 
@@ -137,8 +166,8 @@ background-color:  ${props => props.theme === 'light' ? '#eaecef' : '#1e1e1e'};
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
-border: ${props => props.theme === 'light' ? '1px solid #979ea6' : '1px solid #4d4d4d'};
-background-color:  ${props => props.theme === 'light' ? '#eaecef' : '#1e1e1e'};
+    border: ${props => props.theme === 'light' ? '1px solid #979ea6' : '1px solid #4d4d4d'};
+    background-color:  ${props => props.theme === 'light' ? '#eaecef' : '#1e1e1e'};
     border-radius: 1.5rem;
     color: rgb(134, 142, 150);
     cursor: pointer;
@@ -146,30 +175,6 @@ background-color:  ${props => props.theme === 'light' ? '#eaecef' : '#1e1e1e'};
   }
 `;
 
-const LikeShareWrap = styled.div`
-  margin-top: 32px;
-  position: relative;
-`;
-
-const LikeShareContainer = styled.div`
-  position: fixed;
-  top: 300px;
-  transform: translateX(-200%);
-`;
-
-const LikeShareBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px;
-  background: rgb(248, 249, 250);
-  border: 1px solid rgb(241, 243, 245);
-  width: 4rem;
-  border-radius: 2rem;
-  & > :nth-child(2) {
-    margin: 8px 0 16px 0;
-  }
-`;
 const Wrap = styled.div`
   box-sizing: border-box;
   max-width: 768px;
@@ -234,6 +239,10 @@ width: 100px;
   border-radius: 50%;
   margin-right: 1rem;
 `;
+const Body = styled.div`
+  padding: 0px;
+`;
+
 const Hr = styled.div`
 background-color:  ${props => props.theme === 'light' ? '#eaecef' : '#1e1e1e'};
   width: 100%;
@@ -241,34 +250,21 @@ background-color:  ${props => props.theme === 'light' ? '#eaecef' : '#1e1e1e'};
   margin-top: 2rem;
   margin-bottom: 1.5rem;
 `;
-const FontBox = styled.div`
-  padding: 10px;
-  cursor: pointer;
-`;
-const Font = styled.text`
-  // padding: 10px;
-  // background-color: orange;
-  font-size: 24px;
-  font-family: "firaMono-Medium";
-  color: rgb(52, 58, 64);
-  // display: inline-block;
-  // margin-left: 15px;
-`;
-const Btn = styled.button`
-  cursor: pointer;
-  margin: 15px 10px 15px 0px;
-  font-size: 14px;
-  background-color: white;
-  /* background-color: #343a40; */
-  color: #343a40;
-  font-size: 17px;
-  padding: 10px 15px;
+
+const User = styled.div`
   font-weight: bold;
-  border-radius: 25px;
-  border: 1px solid #343a40;
-  &:hover {
-    background-color: #868e96;
-    transition: 0.125s;
+  display: flex;
+  font-size: 20px;
+  justify-content: space-between;
+  align-items: center;
+  button {
+    border: ${props => props.theme === 'light' ? '1px solid white' : '1px solid black'};
+    color:  ${props => props.theme === 'light' ? 'white' : 'black'};
+    background-color:${props => props.theme === 'dark' ? 'white' : 'rgb(90, 92, 94)'};
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
   }
 `;
 

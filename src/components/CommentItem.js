@@ -2,10 +2,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { actionCreators as commentAction } from "../redux/modules/comment";
-
+import { actionCreators as commentActions } from "../redux/modules/comment";
+import { useTheme } from '../context/themeProvider';
 const CommentItem = (props) => {
 
+  const ThemeMode = useTheme();
   const dispatch = useDispatch();
 
   const loginUser = localStorage.getItem("userName")
@@ -16,14 +17,16 @@ const CommentItem = (props) => {
   const commentId = props.commentId
   const commentModifiedAt = props.commentModifiedAt
   const commentUserName = props.commentUserName
-
+  const userIcon = commentUserName[0] + commentUserName[1]
 
 
   const handleDelete = () => {
-    // const result = window.confirm("댓글을 정말로 삭제하시겠습니까?");
-    // if (result) {
-    //   dispatch(commentAction.removeCommentDB(commentId));
-    // }
+    const result = window.confirm("댓글을 정말로 삭제하시겠습니까?");
+    if (result) {
+      dispatch(commentActions.delCommentAction(commentId));
+
+      document.location.reload();
+    }
   };
 
   const handleModify = () => { };
@@ -31,11 +34,12 @@ const CommentItem = (props) => {
   if (commentUserName === loginUser) {
     return (
       <React.Fragment>
-        <Container>
-          <User>
+        <Container theme={ThemeMode[0]}>
+          <User theme={ThemeMode[0]}>
             <UserInfo>
-              <img alt='' src={"/img/profile.png"} />
+              <button >{userIcon}</button>
               <div style={{ margin: "auto" }}>
+
                 <UserName>{commentUserName}</UserName>
                 <Time>{commentModifiedAt}</Time>
               </div>
@@ -59,10 +63,10 @@ const CommentItem = (props) => {
 
   return (
     <React.Fragment>
-      <Container>
-        <User>
-          <UserInfo>
-            <img alt='' src={"/img/profile.png"} />
+      <Container theme={ThemeMode[0]}>
+        <User theme={ThemeMode[0]}>
+          <UserInfo >
+            <button  >{userIcon}</button>
             <div style={{ margin: "auto" }}>
               <UserName>{commentUserName}</UserName>
               <Time>{commentModifiedAt}</Time>
@@ -95,15 +99,22 @@ const Container = styled.div`
   max-width: 768px;
   min-width: 452px;
   margin: auto;
-  border-bottom: 1px solid rgb(233, 236, 239);
+  border-bottom: ${props => props.theme === 'light'
+    ? '1px solid rgb(233, 236, 239)'
+    : '1px solid rgb(34, 36, 38)'};
   padding: 1.5rem 0 1.5rem 0;
 `;
 
 const User = styled.div`
+  font-weight: bold;
   display: flex;
+  font-size: 20px;
   justify-content: space-between;
   align-items: center;
-  img {
+  button {
+    border: ${props => props.theme === 'light' ? '1px solid white' : '1px solid black'};
+    color:  ${props => props.theme === 'light' ? 'white' : 'black'};
+    background-color:${props => props.theme === 'dark' ? 'white' : 'rgb(90, 92, 94)'};
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -118,7 +129,6 @@ const UserInfo = styled.div`
 const UserName = styled.div`
   font-size: 1rem;
   font-weight: bold;
-  color: rgb(52, 58, 64);
   text-align: left;
 `;
 
@@ -130,7 +140,6 @@ const Time = styled.div`
 
 const Content = styled.div`
   font-size: 1.125rem;
-  color: rgb(34, 36, 38);
   line-height: 1.7;
   letter-spacing: -0.004em;
   word-break: keep-all;
@@ -163,5 +172,4 @@ const PlusComment = styled.div`
     margin-right: 0.5rem;
   }
 `;
-
 export default CommentItem;
