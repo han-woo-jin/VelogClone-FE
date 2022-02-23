@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { useTheme } from '../context/themeProvider';
 import ReactMarkdown from 'react-markdown';
+import FavoriteIcon from "@material-ui/icons/Favorite";
 const Card = (props) => {
   const ThemeMode = useTheme();
 
@@ -38,7 +39,7 @@ const Card = (props) => {
             <UserName>{props.postUserName}</UserName>
           </FooterLeft>
           <Like>
-            <span>{props.likeCnt}</span>
+            <span><FavoriteIcon fontSize="" />{props.likeCnt}</span>
           </Like>
         </Footer>
       </CardWrap>
@@ -156,7 +157,7 @@ const Like = styled.div`
     height: 1.6rem;
   }
   span {
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
 `;
 

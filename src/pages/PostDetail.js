@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import CommentWrite from "../components/CommentWrite";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { history } from "../redux/configStore";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import ShareIcon from "@material-ui/icons/Share";
 // 마크다운 뷰어 토스트ui 라이브러리 사용
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
@@ -12,14 +14,16 @@ import DetailLayout from '../components/DetailLayout'
 // React Icons
 import { useTheme } from '../context/themeProvider';
 import { apis } from '../shared/axios';
+import { Button } from '../elements';
 
 const PostDetail = (props) => {
   const dispatch = useDispatch();
   const ThemeMode = useTheme();
 
+  const pathRef = useRef();
   const viewerRef = useRef();
   const [detailList, setDetailList] = React.useState([]);
-
+  const [likeValue, setLikeValue] = React.useState();
   const [commentList, setCommentList] = React.useState([]);
   const [comment, setComment] = React.useState();
   const [commentId, setCommentId] = React.useState();
@@ -55,6 +59,7 @@ const PostDetail = (props) => {
   // const user = useSelector((state) => state.user.user);
 
   console.log(viewerRef)
+
   const deletePost = () => {
     const ok = window.confirm("정말로 삭제하시겠어요?")
 
@@ -64,6 +69,16 @@ const PostDetail = (props) => {
     } else {
       return;
     }
+  }
+
+  const likePost = () => {
+    setLikeValue(1)
+    apis.likePost(id, likeValue)
+      .then((res) => {
+        console.log(res)
+        history.push('/');
+      })
+      .catch((error) => console.log(error))
   }
 
   const CurrentMode = ThemeMode[0] === 'light' ? 'null' : 'dark';
@@ -86,7 +101,31 @@ const PostDetail = (props) => {
             </div>
           ) : null}
         </Info>
+        <LikeShareWrap >
+          <LikeShareContainer>
+            <LikeShareBox theme={ThemeMode[0]}>
+              <button theme={ThemeMode[0]} onClick={likePost}><FavoriteIcon fontSize="large" /></button>
 
+              <div>{detailList.likeCount}</div>
+              <button
+                onClick={() => {
+                  pathRef.current.select();
+                  document.execCommand("copy");
+                  pathRef.current.setSelectionRange(0, 0);
+                  alert("게시글 주소 복사완료");
+                }}
+              >
+                <input
+                  style={{ position: "fixed", top: "-1000%" }}
+                  ref={pathRef}
+                  value={document.location.href}
+                  readOnly
+                />
+                <ShareIcon fontSize="large" />
+              </button>
+            </LikeShareBox>
+          </LikeShareContainer>
+        </LikeShareWrap>
         <div>
 
 
@@ -114,6 +153,35 @@ const PostDetail = (props) => {
 };
 
 
+const LikeShareWrap = styled.div`
+  margin-top: 32px;
+  position: relative;
+`;
+
+const LikeShareContainer = styled.div`
+  position: fixed;
+  top: 300px;
+  transform: translateX(-200%);
+`;
+
+const LikeShareBox = styled.div`
+  border: ${props => props.theme === 'light' ? '1px solid #868e96' : '1px solid #868e96'};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px;
+  background-color:  ${props => props.theme === 'light' ? '#eaecef' : '#1e1e1e'};
+  width: 4rem;
+  border-radius: 2.5rem;
+  & > :nth-child(2) {
+    margin: 8px 0 16px 0;
+  }
+  button {
+    text-align: center;
+    color: ${props => props.theme === 'light' ? '#1e1e1e' : '#eaecef'};
+  }
+`;
 
 
 

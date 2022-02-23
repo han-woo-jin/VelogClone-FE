@@ -118,7 +118,7 @@ const PostWrite = (props) => {
             ref={editorRef}
             previewStyle="vertical"
             width="100%"
-            height="50vh"
+            height="100vh"
             usageStatistics={false}
             initialEditType="markdown"
             useCommandShortcut={true}

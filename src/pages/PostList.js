@@ -37,7 +37,6 @@ const PostList = (props) => {
         {/* 상단에 있는 트렌딩, 최신 버튼 */}
         <Button
           theme={ThemeMode[0]}
-          onClick={() => window.alert("힝 속았지~ 😎")}
         >
           <div
             style={{
@@ -82,7 +81,6 @@ const PostList = (props) => {
 
         <HamDIv>
           <BiDotsVerticalRounded
-            onClick={() => window.alert("힝 속았지~ 😎")}
             style={{
               width: "25px",
               height: "25px",

@@ -13,7 +13,7 @@ const CommentItem = (props) => {
   const commentId = props.commentId
   const commentModifiedAt = props.commentModifiedAt
   const commentUserName = props.commentUserName
-  const userIcon = commentUserName[0] + commentUserName[1]
+  const userIcon = commentUserName.substring(0, 2)
 
 
   const handleDelete = () => {

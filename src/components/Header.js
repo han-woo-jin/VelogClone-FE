@@ -11,7 +11,7 @@ import Nav from './Nav';
 import { AiFillCaretDown } from "react-icons/ai";
 
 const Header = (props) => {
-  const userName = localStorage.getItem("userName")[0] + localStorage.getItem("userName")[1];
+  const userName = localStorage?.getItem("userName")?.substring(0, 2)
 
   const dispatch = useDispatch();
   const user = document.cookie

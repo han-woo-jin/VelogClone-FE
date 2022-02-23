@@ -52,7 +52,11 @@ export const apis = {
   },
     { withCredentials: true }
   ),
-
+  likePost: (postId, likeValue) => instance.post(`/api/likes/${postId}`, {
+    likeValue: likeValue,
+  },
+    { withCredentials: true }
+  ),
   // 게시물 수정하기
   editPost: (postId, content, title) => instance.put(`/api/posting/${postId}`, {
     content: content,
