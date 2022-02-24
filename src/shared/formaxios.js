@@ -4,7 +4,7 @@ const token = document.cookie.split("=")[1];
 
 export const instance = axios.create({
   // 기본적으로 우리가 바라볼 서버의 주소
-  baseURL: "http://13.124.244.126/",
+  baseURL: "",
   headers: {
     "Content-Type": "multipart/form-data",
     accept: "application/json",
