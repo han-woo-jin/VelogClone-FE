@@ -149,7 +149,6 @@ const RightMenu = styled.li`
 const LeftMenu = styled.li`
   font-size: 16px;
   font-weight: 500;
-  min-width: 200px;
   button{
     
   color:  ${props => props.theme === 'light' ? 'black' : 'white'};
