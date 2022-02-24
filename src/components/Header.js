@@ -54,13 +54,17 @@ const Header = (props) => {
               velog
             </Link>
           </RightMenu>
-          <LeftMenu>
-            <BsSearch style={{
-              width: "25px",
-              height: "25px",
-              marginRight: "10px",
-              marginBottom: "-7px",
-            }} />
+          <LeftMenu theme={ThemeMode[0]}>
+            <button onClick={() => { history.push('/search') }}>
+              <BsSearch
+
+                style={{
+                  width: "25px",
+                  height: "25px",
+                  marginRight: "8px",
+                  marginBottom: "-7px",
+                }} />
+            </button>
             <WriteBtn theme={ThemeMode[0]} onClick={() => { history.push('/postwrite') }}>새 글 작성</WriteBtn>
 
             <UserBtn theme={ThemeMode[0]} onClick={navBtn} >{userName}</UserBtn>
@@ -82,13 +86,15 @@ const Header = (props) => {
             velog
           </Link>
         </RightMenu>
-        <LeftMenu>
-          <BsSearch style={{
-            width: "25px",
-            height: "25px",
-            marginRight: "10px",
-            marginBottom: "-7px",
-          }} />
+        <LeftMenu theme={ThemeMode[0]}>
+          <button onClick={() => { history.push('/search') }}>
+            <BsSearch style={{
+              width: "25px",
+              height: "25px",
+              marginRight: "8px",
+              marginBottom: "-7px",
+            }} />
+          </button>
           <WriteBtn theme={ThemeMode[0]} onClick={() => { modalClose(); }}>로그인</WriteBtn>
           {modalOpen && <Modal modalClose={modalClose}></Modal>}
 
@@ -140,6 +146,10 @@ const LeftMenu = styled.li`
   font-size: 16px;
   font-weight: 500;
   min-width: 200px;
+  button{
+    
+  color:  ${props => props.theme === 'light' ? 'black' : 'white'};
+  }
 `
 const WriteBtn = styled.button`
   border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};

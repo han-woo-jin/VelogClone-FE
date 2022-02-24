@@ -24,6 +24,7 @@ const PostDetail = (props) => {
   const viewerRef = useRef();
   const [detailList, setDetailList] = React.useState([]);
   const [likeValue, setLikeValue] = React.useState();
+  const [likeCount, setLikeCount] = React.useState();
   const [commentList, setCommentList] = React.useState([]);
   const [comment, setComment] = React.useState();
   const [commentId, setCommentId] = React.useState();
@@ -31,6 +32,9 @@ const PostDetail = (props) => {
   const [commentUserName, setCommentUserName] = React.useState();
   const [postUserEmail, setUserEmail] = React.useState();
   const loginUser = localStorage.getItem("userName")
+
+  const detailUser = localStorage?.setItem("detailUser", postUserEmail)
+  console.log(detailUser)
   const id = props.match.params.postId
 
   useEffect(() => {
@@ -76,7 +80,7 @@ const PostDetail = (props) => {
     apis.likePost(id, likeValue)
       .then((res) => {
         console.log(res)
-        history.push('/');
+        history.push("/");
       })
       .catch((error) => console.log(error))
   }
@@ -106,7 +110,8 @@ const PostDetail = (props) => {
             <LikeShareBox theme={ThemeMode[0]}>
               <button theme={ThemeMode[0]} onClick={likePost}><FavoriteIcon fontSize="large" /></button>
 
-              <div>{detailList.likeCount}</div>
+              <div>{detailList.likeCnt}</div>
+
               <button
                 onClick={() => {
                   pathRef.current.select();
@@ -180,6 +185,9 @@ const LikeShareBox = styled.div`
   button {
     text-align: center;
     color: ${props => props.theme === 'light' ? '#1e1e1e' : '#eaecef'};
+    :hover{
+      color:red;
+    }
   }
 `;
 

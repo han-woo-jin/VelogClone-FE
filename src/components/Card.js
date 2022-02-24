@@ -4,18 +4,29 @@ import styled from "styled-components";
 import { useTheme } from '../context/themeProvider';
 import ReactMarkdown from 'react-markdown';
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import { useHistory } from 'react-router-dom';
+
 const Card = (props) => {
   const ThemeMode = useTheme();
-
+  const history = useHistory();
   console.warn = console.error = () => { };
   const apple = props.content.split("!")[0];
   const orange = props.content.split(")")[1];
-
+  const tokencheck = document.cookie;
+  const token = tokencheck.split("=")[1];
 
   return (
     <>
       <CardWrap
         theme={ThemeMode[0]}
+        onClick={() => {
+          if (token) {
+            history.push(`/detail/${props.postId}`)
+          } else {
+            window.alert('로그인 먼저 해주세요!')
+            history.push('/')
+          }
+        }}
       >
         <CardImg src={props.imageUrl} />
         <Body>

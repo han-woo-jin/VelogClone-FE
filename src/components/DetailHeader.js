@@ -10,21 +10,15 @@ import { actionCreators as userActions } from '../redux/modules/user';
 import Nav from './Nav';
 import { AiFillCaretDown } from "react-icons/ai";
 
-const DetailHeader = (props) => {
+const Header = (props) => {
+  const userName = localStorage?.getItem("userName")?.substring(0, 2)
+  const email = localStorage?.getItem("detailUser")
+
   const dispatch = useDispatch();
   const user = document.cookie
-  const userEmail = localStorage.getItem("userEmail")
-  const userName = localStorage.getItem("userName")[0] + localStorage.getItem("userName")[1];
-
-
-  const usereEmail = props.userEmail
-  const userIcon = props.userIcon
-  console.log(usereEmail, userIcon)
-
   // const user = true;
   const history = useHistory();
-  const id = useSelector((state) => state.user);
-  console.log(id)
+
   const [nav, setNav] = React.useState(false)
 
   const navBtn = () => {
@@ -55,26 +49,30 @@ const DetailHeader = (props) => {
   if (user) {
     return (
       <>
-        <StyledHeader>
+        <StyledHeader >
           <RightMenu theme={ThemeMode[0]}>
             <Link to='/' >
-              velog
+              <img style={{ marginRight: "8px", border: "1px solid #363a3f", background: "#363a3f" }} alt="" src='/img/grayFavicon.png'></img>
+              {email}.log
             </Link>
-
-            <Share />
           </RightMenu>
-          <LeftMenu>
-            <BsSearch style={{
-              width: "25px",
-              height: "25px",
-              marginRight: "10px",
-              marginBottom: "-7px",
-            }} />
+          <LeftMenu theme={ThemeMode[0]}>
+            <button onClick={() => { history.push('/search') }}>
+              <BsSearch
+
+                style={{
+                  width: "25px",
+                  height: "25px",
+                  marginRight: "8px",
+                  marginBottom: "-7px",
+                }} />
+            </button>
             <WriteBtn theme={ThemeMode[0]} onClick={() => { history.push('/postwrite') }}>새 글 작성</WriteBtn>
 
             <UserBtn theme={ThemeMode[0]} onClick={navBtn} >{userName}</UserBtn>
             <AiFillCaretDown onClick={navBtn} />
             <Nav nav={nav} />
+
             {modalOpen && <Modal modalClose={modalClose}></Modal>}
           </LeftMenu>
         </StyledHeader>
@@ -87,21 +85,20 @@ const DetailHeader = (props) => {
       <StyledHeader>
         <RightMenu theme={ThemeMode[0]}>
           <Link to='/' >
-            velog
+            <img style={{ marginRight: "8px" }} alt="" src='/img/grayFavicon.png'></img>
+            {email}.log
           </Link>
-          <Share />
-
         </RightMenu>
         <LeftMenu>
-
-
-          <BsSearch style={{
-            width: "25px",
-            height: "25px",
-            marginRight: "10px",
-            marginBottom: "-7px",
-          }} />
-          <UserBtn theme={ThemeMode[0]} onClick={() => { modalClose(); }}>로그인</UserBtn>
+          <button onClick={() => { history.push('/search') }}>
+            <BsSearch style={{
+              width: "25px",
+              height: "25px",
+              marginRight: "8px",
+              marginBottom: "-7px",
+            }} />
+          </button>
+          <WriteBtn theme={ThemeMode[0]} onClick={() => { modalClose(); }}>로그인</WriteBtn>
           {modalOpen && <Modal modalClose={modalClose}></Modal>}
 
         </LeftMenu>
@@ -111,14 +108,13 @@ const DetailHeader = (props) => {
 
 }
 
-export default DetailHeader;
+export default Header;
 
 const StyledHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: auto;
-  
   height: 64px;
   padding: 10px 110px 0px 110px;
   margin-left: auto;
@@ -130,9 +126,6 @@ const StyledHeader = styled.div`
 
   font-family: "Fira Mono", monospace;
 `
-const Share = styled.div`
-
-`
 
 const RightMenu = styled.li`
   & a {
@@ -142,6 +135,7 @@ const RightMenu = styled.li`
     color:  ${props => props.theme === 'light' ? 'black' : 'white'};
     font-weight: bold;
     & img {
+      border-radius: 5px;
       width: 30px;
     }
     & p {
@@ -156,6 +150,10 @@ const LeftMenu = styled.li`
   font-size: 16px;
   font-weight: 500;
   min-width: 200px;
+  button{
+    
+  color:  ${props => props.theme === 'light' ? 'black' : 'white'};
+  }
 `
 const WriteBtn = styled.button`
   border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
@@ -177,6 +175,7 @@ const WriteBtn = styled.button`
 const UserBtn = styled.button`
   border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
   color:  ${props => props.theme === 'light' ? 'black' : 'white'};
+  
   cursor: pointer;
   width: 50px;
     height: 50px;

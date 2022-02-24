@@ -30,7 +30,36 @@ const Input = (props) => {
     value,
     is_submit,
     onSubmit,
+    search,
   } = props;
+
+  if (search)
+    return (
+      <React.Fragment>
+        <Grid>
+          {label && <Text margin="0px">{label}</Text>}
+          {is_submit ? (
+            <ElInput
+              rows={4}
+              theme={ThemeMode[0]}
+              type={type}
+              placeholder={placeholder}
+              onChange={_onChange}
+              value={value}
+              onKeyPress={(e) => {
+                if (e.key === "Enter") {
+                  onSubmit(e);
+                }
+              }}
+            />
+          ) : (
+            <ElInput
+              theme={ThemeMode[0]}
+              rows={4} type={type} placeholder={placeholder} onChange={_onChange} />
+          )}
+        </Grid>
+      </React.Fragment>
+    );
 
   if (multiLine) {
     return (
@@ -74,6 +103,7 @@ const Input = (props) => {
 };
 
 Input.defaultProps = {
+  search: false,
   multiLine: false,
   label: false,
   placeholder: "텍스트를 입력해주세요.",
@@ -95,6 +125,25 @@ background-color: ${props => props.theme === 'light' ? '#1e1e1e' : 'white'};;
 `;
 
 const ElInput = styled.input`
+background-color: ${props => props.theme === 'light' ? 'white' : '#1e1e1e'};
+border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid #4d4d4d'};
+color: ${props => props.theme === 'light' ? 'black' : 'white'};
+  width: 100%;
+  padding: 12px 4px;
+  box-sizing: border-box;
+`;
+
+const SeTextarea = styled.textarea`
+color: ${props => props.theme === 'light' ? '#1e1e1e' : 'white'};
+
+background-color: ${props => props.theme === 'light' ? '#1e1e1e' : 'white'};;
+  border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
+  width: 100%;
+  padding: 12px 4px;
+  box-sizing: border-box;
+`;
+
+const SeInput = styled.input`
 background-color: ${props => props.theme === 'light' ? 'white' : '#1e1e1e'};
 border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid #4d4d4d'};
 color: ${props => props.theme === 'light' ? 'black' : 'white'};

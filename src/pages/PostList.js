@@ -102,14 +102,7 @@ const PostList = (props) => {
           {post_list.map((post, index) => {
 
             return (
-              <Grid key={index} onClick={() => {
-                if (token) {
-                  history.push(`/detail/${post.postId}`)
-                } else {
-                  window.alert('로그인 먼저 해주세요!')
-                  history.push('/')
-                }
-              }}>
+              <Grid key={index}>
 
                 <Card key={index} {...post} />
               </Grid>

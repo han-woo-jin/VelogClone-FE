@@ -10,6 +10,8 @@ import PostWrite from '../pages/PostWrite';
 import { ConnectedRouter } from "connected-react-router";
 import { history } from "../redux/configStore";
 import PostDetail from "../pages/PostDetail"
+import Search from "../pages/Search"
+
 function App() {
   return (
     <ConnectedRouter history={history}>
@@ -17,6 +19,7 @@ function App() {
         <GlobalStyle />
         <Suspense fallback={<div>...loading</div>}>
           <Switch>
+            <Route exact path="/search" component={Search} />
             <Route exact path="/postwrite" component={PostWrite} />
             <Route path="/postwrite/:postId" component={PostWrite} />
             <Route exact path="/modal" component={Modal} />
