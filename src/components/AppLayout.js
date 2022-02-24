@@ -4,7 +4,6 @@ import { useTheme } from '../context/themeProvider';
 import { FlexContainer } from '../style/styles';
 import ThemeToggle from '../theme/ThemeToggle';
 import Header from './Header';
-import PostList from '../pages/PostList';
 
 const AppLayout = ({ children }) => {
   const [ThemeMode, toggleTheme] = useTheme();

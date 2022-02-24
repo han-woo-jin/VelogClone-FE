@@ -1,59 +1,43 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { actionCreators as commentAction } from "../redux/modules/comment";
-
+import { actionCreators as commentActions } from "../redux/modules/comment";
+import { useTheme } from '../context/themeProvider';
 const CommentItem = (props) => {
-  const { commentId, nickname, content, regdate, index } = props;
-  const url = useSelector((state) => state.router);
-  const postId = url.location.pathname.slice(8);
+
+  const ThemeMode = useTheme();
   const dispatch = useDispatch();
 
-  // 댓글유저ID
-  const userEmail = useSelector(
-    (state) => state.comment.commentList[props.index].user.email
-  );
-  const userId = useSelector(
-    (state) => state.comment.commentList[props.index].user.email.split("@")[0]
-  );
+  const loginUser = localStorage.getItem("userName")
+  const comment = props.comment
+  const commentId = props.commentId
+  const commentModifiedAt = props.commentModifiedAt
+  const commentUserName = props.commentUserName
+  const userIcon = commentUserName.substring(0, 2)
 
-  //댓글 작성 시간
-  const modDate = useSelector(
-    (state) => state.comment.commentList[props.index].modDate.split("T")[0]
-  );
-  const yearMonthDay = modDate.split("-");
-  const year = yearMonthDay[0];
-  const month = yearMonthDay[1];
-  const day = yearMonthDay[2];
-  const writtenDate = year + "년 " + month + "월 " + day + "일";
-
-  const loginUser = useSelector((state) => state.user.user.sub);
-
-  React.useEffect(() => {
-    dispatch(commentAction.getCommentDB(postId));
-  }, []);
 
   const handleDelete = () => {
     const result = window.confirm("댓글을 정말로 삭제하시겠습니까?");
-
     if (result) {
-      dispatch(commentAction.removeCommentDB(commentId));
+      dispatch(commentActions.delCommentAction(commentId));
+
+      document.location.reload();
     }
   };
 
   const handleModify = () => { };
 
-  if (userEmail === loginUser) {
+  if (commentUserName === loginUser) {
     return (
       <React.Fragment>
-        <Container>
-          <User>
+        <Container theme={ThemeMode[0]}>
+          <User theme={ThemeMode[0]}>
             <UserInfo>
-              <img src={"/img/profile.png"} />
+              <button >{userIcon}</button>
               <div style={{ margin: "auto" }}>
-                <UserName>{userId}</UserName>
-                <Time>{writtenDate}</Time>
+
+                <UserName>{commentUserName}</UserName>
+                <Time>{commentModifiedAt}</Time>
               </div>
             </UserInfo>
             <Edit>
@@ -61,7 +45,7 @@ const CommentItem = (props) => {
               <span onClick={handleDelete}>삭제</span>
             </Edit>
           </User>
-          <Content>{content}</Content>
+          <Content>{comment}</Content>
           <PlusComment>
             <span>
               <i className="xi-plus-square-o"></i>
@@ -75,17 +59,17 @@ const CommentItem = (props) => {
 
   return (
     <React.Fragment>
-      <Container>
-        <User>
-          <UserInfo>
-            <img src={"/img/profile.png"} />
+      <Container theme={ThemeMode[0]}>
+        <User theme={ThemeMode[0]}>
+          <UserInfo >
+            <button  >{userIcon}</button>
             <div style={{ margin: "auto" }}>
-              <UserName>{userId}</UserName>
-              <Time>{writtenDate}</Time>
+              <UserName>{commentUserName}</UserName>
+              <Time>{commentModifiedAt}</Time>
             </div>
           </UserInfo>
         </User>
-        <Content>{content}</Content>
+        <Content>{comment}</Content>
         <PlusComment>
           <span>
             <i className="xi-plus-square-o"></i>
@@ -111,15 +95,22 @@ const Container = styled.div`
   max-width: 768px;
   min-width: 452px;
   margin: auto;
-  border-bottom: 1px solid rgb(233, 236, 239);
+  border-bottom: ${props => props.theme === 'light'
+    ? '1px solid rgb(233, 236, 239)'
+    : '1px solid rgb(34, 36, 38)'};
   padding: 1.5rem 0 1.5rem 0;
 `;
 
 const User = styled.div`
+  font-weight: bold;
   display: flex;
+  font-size: 20px;
   justify-content: space-between;
   align-items: center;
-  img {
+  button {
+    border: ${props => props.theme === 'light' ? '1px solid white' : '1px solid black'};
+    color:  ${props => props.theme === 'light' ? 'white' : 'black'};
+    background-color:${props => props.theme === 'dark' ? 'white' : 'rgb(90, 92, 94)'};
     width: 55px;
     height: 55px;
     border-radius: 50%;
@@ -134,7 +125,6 @@ const UserInfo = styled.div`
 const UserName = styled.div`
   font-size: 1rem;
   font-weight: bold;
-  color: rgb(52, 58, 64);
   text-align: left;
 `;
 
@@ -146,7 +136,6 @@ const Time = styled.div`
 
 const Content = styled.div`
   font-size: 1.125rem;
-  color: rgb(34, 36, 38);
   line-height: 1.7;
   letter-spacing: -0.004em;
   word-break: keep-all;
@@ -179,5 +168,4 @@ const PlusComment = styled.div`
     margin-right: 0.5rem;
   }
 `;
-
 export default CommentItem;

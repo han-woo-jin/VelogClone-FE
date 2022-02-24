@@ -1,9 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import { setCookie, getCookie, deleteCookie } from "../../shared/cookie";
-import axios from 'axios';
+import { setCookie, deleteCookie } from "../../shared/cookie";
 import { apis } from '../../shared/axios';
-import { useHistory } from 'react-router-dom';
 
 const LOG_OUT = "LOG_OUT";
 const GET_USER = "GET_USER";
@@ -34,9 +32,12 @@ const loginAction = (userEmail, password) => {
       .login(userEmail, password)
       .then((res) => {
         setCookie('token', res.data.token, 7);
+        localStorage.setItem("userName", res.data.userName);
+        localStorage.setItem("userEmail", res.data.email);
         dispatch(setUser({ userEmail: userEmail, }));
 
         document.location.reload();
+
         console.log(res, "로그인 성공")
       })
       .catch((error) => {
@@ -53,6 +54,8 @@ const signupAction = (userEmail, password, passwordCheck, userName) => {
       .then((res) => {
 
         setCookie('token', res.data.token, 7);
+        localStorage.setItem("userName", res.data.userName);
+        localStorage.setItem("userEmail", res.data.email);
         dispatch(setUser({ userEmail: userEmail, userName: userName }))
         document.location.reload();
         history.replace("/");
@@ -62,7 +65,6 @@ const signupAction = (userEmail, password, passwordCheck, userName) => {
       .catch((error) => console.log(error));
   };
 };
-
 const logoutAction = () => {
   return function (dispatch, getState, { history }) {
     deleteCookie("token");

@@ -11,6 +11,8 @@ import Nav from './Nav';
 import { AiFillCaretDown } from "react-icons/ai";
 
 const Header = (props) => {
+  const userName = localStorage?.getItem("userName")?.substring(0, 2)
+
   const dispatch = useDispatch();
   const user = document.cookie
   // const user = true;
@@ -52,18 +54,23 @@ const Header = (props) => {
               velog
             </Link>
           </RightMenu>
-          <LeftMenu>
-            <BsSearch style={{
-              width: "25px",
-              height: "25px",
-              marginRight: "10px",
-              marginBottom: "-7px",
-            }} />
+          <LeftMenu theme={ThemeMode[0]}>
+            <button onClick={() => { history.push('/search') }}>
+              <BsSearch
+
+                style={{
+                  width: "25px",
+                  height: "25px",
+                  marginRight: "8px",
+                  marginBottom: "-7px",
+                }} />
+            </button>
             <WriteBtn theme={ThemeMode[0]} onClick={() => { history.push('/postwrite') }}>새 글 작성</WriteBtn>
 
-            <WriteBtn theme={ThemeMode[0]} onClick={navBtn} >누구</WriteBtn>
-
+            <UserBtn theme={ThemeMode[0]} onClick={navBtn} >{userName}</UserBtn>
+            <AiFillCaretDown onClick={navBtn} />
             <Nav nav={nav} />
+
             {modalOpen && <Modal modalClose={modalClose}></Modal>}
           </LeftMenu>
         </StyledHeader>
@@ -79,13 +86,15 @@ const Header = (props) => {
             velog
           </Link>
         </RightMenu>
-        <LeftMenu>
-          <BsSearch style={{
-            width: "25px",
-            height: "25px",
-            marginRight: "10px",
-            marginBottom: "-7px",
-          }} />
+        <LeftMenu theme={ThemeMode[0]}>
+          <button onClick={() => { history.push('/search') }}>
+            <BsSearch style={{
+              width: "25px",
+              height: "25px",
+              marginRight: "8px",
+              marginBottom: "-7px",
+            }} />
+          </button>
           <WriteBtn theme={ThemeMode[0]} onClick={() => { modalClose(); }}>로그인</WriteBtn>
           {modalOpen && <Modal modalClose={modalClose}></Modal>}
 
@@ -136,6 +145,11 @@ const RightMenu = styled.li`
 const LeftMenu = styled.li`
   font-size: 16px;
   font-weight: 500;
+  min-width: 200px;
+  button{
+    
+  color:  ${props => props.theme === 'light' ? 'black' : 'white'};
+  }
 `
 const WriteBtn = styled.button`
   border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
@@ -148,6 +162,24 @@ const WriteBtn = styled.button`
   padding: 10px 10px;
   font-weight: bold;
   border-radius: 25px;
+  &:hover {
+    background-color: ${props => props.theme === 'light' ? 'black' : 'white'};
+    color:${props => props.theme === 'light' ? 'white' : 'black'};;
+    transition: 0.125s;
+  }
+`
+const UserBtn = styled.button`
+  border: ${props => props.theme === 'light' ? '1px solid black' : '1px solid white'};
+  color:  ${props => props.theme === 'light' ? 'black' : 'white'};
+  
+  cursor: pointer;
+  width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: 0.5rem;
+  font-size: 16px;
+  padding: 10px 10px;
+  font-weight: bold;
   &:hover {
     background-color: ${props => props.theme === 'light' ? 'black' : 'white'};
     color:${props => props.theme === 'light' ? 'white' : 'black'};;

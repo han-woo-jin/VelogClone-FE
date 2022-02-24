@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Card from "../components/Card";
-import { actionCreators as postActions } from "../redux/modules/post";
-import Header from "../components/Header";
 import { apis } from "../shared/axios";
+import { useHistory } from 'react-router-dom';
 
 // React Icons
 import { ImClock } from "react-icons/im";
@@ -12,14 +10,15 @@ import { BsGraphUp } from "react-icons/bs";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import { useTheme } from '../context/themeProvider';
 
-const PostList = () => {
-  const dispatch = useDispatch();
+const PostList = (props) => {
   // const postList = useSelector((state) => state.post.list);
-
+  const history = useHistory();
   const ThemeMode = useTheme();
   // React.useEffect(() => {
   //   dispatch(postActions.getPostMD());
   // }, []);
+  const tokencheck = document.cookie;
+  const token = tokencheck.split("=")[1];
 
   const [post_list, setPostList] = useState([]);
 
@@ -33,12 +32,11 @@ const PostList = () => {
   }, [])
 
   return (
-    <>
+    <React.Fragment>
       <Wrapper theme={ThemeMode[0]}>
         {/* 상단에 있는 트렌딩, 최신 버튼 */}
         <Button
           theme={ThemeMode[0]}
-          onClick={() => window.alert("힝 속았지~ 😎")}
         >
           <div
             style={{
@@ -83,7 +81,6 @@ const PostList = () => {
 
         <HamDIv>
           <BiDotsVerticalRounded
-            onClick={() => window.alert("힝 속았지~ 😎")}
             style={{
               width: "25px",
               height: "25px",
@@ -103,11 +100,18 @@ const PostList = () => {
       >
         <Grid>
           {post_list.map((post, index) => {
-            return <Card key={index} {...post} />
+
+            return (
+              <Grid key={index}>
+
+                <Card key={index} {...post} />
+              </Grid>
+            )
+
           })}
         </Grid>
       </div>
-    </>
+    </React.Fragment>
   );
 };
 

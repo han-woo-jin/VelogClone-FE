@@ -1,40 +1,43 @@
 import { React, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { actionCreators as postActions } from "../redux/modules/post";
 import { history } from "../redux/configStore";
 import { useTheme } from '../context/themeProvider';
 import { useEffect } from 'react';
 // 마크다운 라이브러리 토스트 ui 사용
 import "@toast-ui/editor/dist/toastui-editor.css";
 import { Editor } from "@toast-ui/react-editor";
-import axios from 'axios';
 import '@toast-ui/editor/dist/theme/toastui-editor-dark.css';
 import { axapis } from '../shared/formaxios';
-import { apis, instance } from '../shared/axios';
+import { apis, } from '../shared/axios';
 
 
-const PostWrite = () => {
-  const dispatch = useDispatch();
+const PostWrite = (props) => {
   const [ImgUrl, setImgUrl] = useState("");
   const [ImgId, setImgId] = useState("");
-
-  const editorRef = useRef();
   const [title, setTitle] = useState("");
+  const editorRef = useRef();
+
 
   const titleChange = (e) => {
     setTitle(e.target.value);
   };
 
+  const id = props.match.params.postId;
+  const is_edit = id ? true : false
 
+  useEffect(() => {
 
+    if (is_edit) {
+      apis.getDetail(id)
+        .then(function (response) {
+          editorRef.current.getInstance().setMarkdown(response.data.content);
+          setTitle(response.data.title)
+        }).catch(function (error) {
+          console.log(error)
+        })
+    }
+  }, []);
 
-  const handleClick = () => {
-    const content = editorRef.current.getInstance().getMarkdown();
-
-    console.log(content, title);
-  };
-  const token = document.cookie.split("=")[1];
 
   useEffect(() => {
     if (editorRef.current) {
@@ -63,67 +66,60 @@ const PostWrite = () => {
           return false;
         });
     }
-
     return () => { };
   }, [editorRef]);
-
-
-  // useEffect(() => {
-  //   if (contentRef.current) {
-  //     contentRef.current.getInstance().removeHook("addImageBlobHook");
-  //     contentRef.current
-  //       .getInstance()
-  //       .addHook("addImageBlobHook", (blob, post) => {
-  //         (async () => {
-  //           let formData = new FormData();
-  //           const post = {
-  //             title: "123123123123",
-  //             content: "asdfasdfasdf",
-  //           }
-  //           formData.append("imageFile", blob);
-  //           formData.append("post", new Blob([JSON.stringify(post)], { type: "application/json" }))
-
-  //           console.log(formData)
-  //           console.log()
-  //           await axapis.imgpost(formData)
-  //             .then((response) => {
-  //               console.log(response)
-  //             })
-  //             .catch((error) => console.log(error))
-  //         })();
-  //         return false;
-  //       });
-  //   }
-  //   return () => { };
-  // }, [contentRef]);
 
   const addPost = () => {
     // 마크다운 언어를 서버에 저장하기위해서 변형함
     const content = editorRef.current.getInstance().getMarkdown();
     const id = ImgId
     console.log(id, title, content)
+
     apis.createPost(id, content, title)
       .then((res) => {
         console.log(res)
+        history.push('/');
       })
       .catch((error) => console.log(error, id, title, content))
+  };
 
+  const editPost = () => {
+    // 마크다운 언어를 서버에 저장하기위해서 변형함
+    const content = editorRef.current.getInstance().getMarkdown();
+    const id = props.match.params.postId
+    console.log(id, title, content)
+
+    apis.editPost(id, content, title)
+      .then((res) => {
+        console.log(res)
+        history.push('/');
+      })
+      .catch((error) => console.log(error, id, title, content))
   };
 
   const ThemeMode = useTheme();
   const CurrentMode = ThemeMode[0] === 'light' ? 'null' : 'dark';
+
   return (
     <>
       <Wrap>
         <Head theme={ThemeMode[0]}>
-          <TitleInput theme={ThemeMode[0]} placeholder="제목을 입력하세요" onChange={titleChange} />
+          <TitleInput value={title} theme={ThemeMode[0]} placeholder="제목을 입력하세요" onChange={titleChange} />
         </Head>
         <Body>
           <Editor
+            events={{
+              change: () => {
+                const data = editorRef.current.getInstance().getMarkdown();
+                editorRef.current.getInstance().setMarkdown(data);
+              },
+            }}
+            editorRef={editorRef}
             ref={editorRef}
             previewStyle="vertical"
             width="100%"
             height="100vh"
+            usageStatistics={false}
             initialEditType="markdown"
             useCommandShortcut={true}
             placeholder="당신의 이야기를 적어보세요"
@@ -143,7 +139,11 @@ const PostWrite = () => {
             <SaveBtn onClick={() => window.alert("힝 속았지~ 😎")}>
               임시저장
             </SaveBtn>
-            <SubmitBtn onClick={addPost}>출간하기</SubmitBtn>
+            {is_edit === true
+              ? <SubmitBtn onClick={editPost}>수정하기</SubmitBtn>
+              : <SubmitBtn onClick={addPost}>출간하기</SubmitBtn>
+            }
+
           </div>
 
         </Footer>
@@ -261,22 +261,4 @@ const SubmitBtn = styled.button`
   }
 `;
 
-const Button = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  background: rgb(18, 184, 134);
-  color: white;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-family: inherit;
-  box-sizing: inherit;
-  outline: none;
-  &:hover {
-    background-color: #45d1a7;
-  }
-`;
 export default PostWrite;
