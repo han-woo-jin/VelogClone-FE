@@ -3,7 +3,7 @@
 > **velog clone coding**
 
 
-유튜브 링크 :
+시연 영상 :https://youtu.be/VHgXhG6XUQY
 <br />
 ##### 프론트 github 주소 : https://github.com/han-woo-jin/VelogClone-FE.git
 ---
