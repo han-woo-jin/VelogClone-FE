@@ -1,10 +1,8 @@
 # velogclone
 
 > **velog clone coding**
-
+유튜브 링크 :
 <br />
-
-##### 노션 뷰 : https://apricot-tarsal-29a.notion.site/4-535a31259dae4ec5bda10de21df55c72
 ##### 프론트 github 주소 : https://github.com/han-woo-jin/VelogClone-FE.git
 ---
 
